@@ -1,0 +1,90 @@
+import pandas as pd
+import numpy as np
+
+#读取原始数据
+#data=pd.read_csv("/Users/liufei/DATA/AutoDock/DATA_TOTAL.csv")
+
+all_drugs=pd.read_csv("./data/all_drugs.csv").iloc[:,0].values.tolist()
+drug_num=len(all_drugs)
+
+#data.get("CIRP1")["Column3"]
+
+
+def motrix_generate(file_path):
+    data=pd.read_excel(file_path,sheet_name=None)
+
+    keys=[]
+    protein_len=0
+
+    motrix=pd.DataFrame()
+
+    #motrix["drugs"]=all_drugs
+
+    for key in data:
+        data_protein=data.get(key)
+
+
+
+        test1=data_protein.sort_values(by='Column3', ascending=True) #按数值排序
+        test2=test1.drop_duplicates(subset=['Column1'])   #去重
+        test2["Column4"] = 0-test2["Column3"]        #获取正值
+
+        test3=test2.sort_values(by='Column1', ascending=True) #药物名称排序统一
+        
+        drug_list=test3.iloc[:,0].values.tolist()    #提取这个蛋白的药物排名
+
+        protein_value=test3.iloc[:,3].values.tolist()  #提取数据值
+
+        #如果某些值为负数，则设定这个值为0
+        for value in range(len(protein_value)):
+            if protein_value[value] < 0:
+                protein_value[value]=0
+
+        sum=np.sum(protein_value)
+
+        for value1 in range(len(protein_value)):
+            protein_value[value1]=protein_value[value1]/sum
+        
+
+
+        #明确药物列表中是否有缺失，如果有缺失的话需要添加上，并且值设定为0
+        for drug_x in all_drugs:
+            if drug_x not in drug_list:
+                drug_list.append(drug_x)
+                protein_value.append(0)
+
+        protein_data_df=pd.DataFrame({'drug':drug_list,'protein':protein_value})
+
+        protein_data_df1=protein_data_df.sort_values(by='drug', ascending=True) #药物名称排序统一
+
+        protein_value_end=protein_data_df1.iloc[:,1].values.tolist()
+
+        motrix[key]=protein_value_end
+
+        protein_len=protein_len + 1
+
+        keys.append(key)
+
+    motrix.index=all_drugs
+
+    protein_num=len(keys)
+
+    #数据矩阵上方的额外矩阵创建
+    extra_pd1=pd.DataFrame(np.zeros((protein_num,protein_num)),columns=keys,index=keys)
+    
+    motrix1=pd.concat([extra_pd1,motrix],axis=0) #上下结合
+
+
+    #数据矩阵右侧的额外矩阵创建
+    extra_pd2=pd.DataFrame(np.zeros((protein_num+drug_num,drug_num)),columns=all_drugs,index=keys+all_drugs)
+
+    motrix_end=pd.concat([motrix1,extra_pd2],axis=1)
+
+
+
+    return motrix_end
+
+
+
+#test=motrix_generate("../data/DATA.xlsx")
+
