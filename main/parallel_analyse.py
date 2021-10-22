@@ -1,8 +1,9 @@
 import pandas as pd
 import numpy as np
-from pandas.core.reshape.merge import merge
+
 
 motrix=pd.read_csv("~/SYNC/CODE/ML-AI/Ranking/pagerank-weight/data/motrix.csv")
+num_parallel=2 #多少种药物联合
 
 motrix.head()
 
@@ -13,7 +14,7 @@ drug1=motrix["drug"].values.tolist()
 
 len_motrix=len(protein1)
 
-value1=list=[5 for x in range(0,len_motrix)]
+value1=[5 for x in range(0,len_motrix)]
 
 len(value1)
 
@@ -29,5 +30,18 @@ new_pd["protein"]=protein
 new_pd["drug"]=drug
 new_pd["value"]=value
 
+
+new_pd.loc[new_pd["drug"]==6]
+
+list(set(protein1))
+
+#筛选出所有的类别
+all_protein = list(set(protein1))
+all_drug = list(set(drug1))
+
+#进行排序
+all_protein.sort(key=protein1.index)
+all_drug.sort(key=drug1.index)
+len(all_drug)
 
 
