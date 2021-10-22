@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import itertools
 
-motrix=pd.read_csv("~/SYNC/CODE/ML-AI/Ranking/pagerank-weight/data/motrix.csv")
+motrix=pd.read_csv("../data/motrix.csv")
 num_parallel=2 #多少种药物联合
 
 motrix.head()
@@ -43,8 +43,10 @@ all_drug.sort(key=drug1.index)
 
 aa = ['a', 'b', 'c']
 bb = list(itertools.permutations(aa, 2))
+print(bb)
 
-drug_combination=list(itertools.permutations(all_drug, num_parallel))  #生成药物联合治疗的排列组合
+#生成药物联合治疗的排列组合
+drug_combination=list(itertools.combinations(all_drug, num_parallel))  #生成药物联合治疗的排列组合
 
 len(drug_combination)
 
