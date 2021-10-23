@@ -1,14 +1,14 @@
 import pandas as pd
 import numpy as np
 import itertools
+import networkx as nx
 
-from pandas.io.parsers import read_csv
+
+#def parallel_rank(motrix, rank1, num_parallel, num_drug)
 
 rank1=pd.read_csv('../result/pagerank_weight.csv')
 rank_list=rank1["urls"].values.tolist()
 #rank1.head(20)
-
-def parallel_rank(motrix,num_parallel,num_drug)
 
 motrix=pd.read_csv("../data/motrix.csv")
 num_parallel=2 #多少种药物联合
@@ -17,17 +17,17 @@ num_drug=50  #选取排名前XX的药物进行联合分析
 motrix.head()
 
 
-protein1=motrix["protein"].values.tolist()
+protein_change=motrix["protein"].values.tolist()
 
-drug1=motrix["drug"].values.tolist()
+drug_change=motrix["drug"].values.tolist()
 
-len_motrix=len(protein1)
+len_motrix=len(protein_change)
 
-value1=[5 for x in range(0,len_motrix)]
+value_change=[5 for x in range(0,len_motrix)]
 
-protein=motrix["protein"].values.tolist()+drug1
-drug=motrix["drug"].values.tolist()+protein1
-value=motrix["value"].values.tolist()+value1
+protein=motrix["protein"].values.tolist()+drug_change
+drug=motrix["drug"].values.tolist()+protein_change
+value=motrix["value"].values.tolist()+value_change
 
 
 new_motrix=pd.DataFrame()
@@ -39,15 +39,15 @@ new_motrix["value"]=value
 
 new_motrix.loc[new_motrix["drug"]==6]
 
-list(set(protein1))
+list(set(protein_change))
 
 #筛选出所有的类别
-all_protein = list(set(protein1))
-#all_drug = list(set(drug1)) #所有药物
+all_protein = list(set(protein_change))
+#all_drug = list(set(drug_change)) #所有药物
 all_drug =  rank_list[len(all_protein)-1:len(all_protein)+num_drug-1]
 
 #进行排序
-all_protein.sort(key=protein1.index)
+all_protein.sort(key=protein_change.index)
 #all_drug.sort(key=drug1.index)
 #len(all_drug)
 
@@ -60,6 +60,7 @@ drug_combination=list(itertools.combinations(all_drug, num_parallel))  #生成�
 
 #drug_test_motrix=drug_test_motrix.append(new_motrix.loc[new_motrix["drug"]==int("6")])
 
+parallel_motrix=pd.DataFrame()
 
 for drug_test in drug_combination:
     drug_test_motrix=pd.DataFrame()
@@ -100,6 +101,15 @@ for drug_test in drug_combination:
     result1=df_metrics.sort_values(by='weighted_personalized_pagerank', ascending=False) 
     #result1.to_csv('result/pagerank_weight.csv')
 
+
+    result1.loc[a_drug,'weighted_personalized_pagerank']
+
+    for a_drug in drug_test:
+        a_drug=int(a_drug)
+        drug1= result1.loc[a_drug,'weighted_personalized_pagerank']
+
+
+        parallel_motrix=parallel_motrix.append(result1.loc[a_drug])
 
 
 
