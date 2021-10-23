@@ -53,15 +53,19 @@ df_metrics = pd.DataFrame(dict(
     weighted_personalized_pagerank = weighted_personalized_pagerank,
 ))
 df_metrics.index.name='urls'
-df_metrics.to_csv('result/pagerank_weight.csv')
+result1=df_metrics.sort_values(by='weighted_personalized_pagerank', ascending=False) 
+result1.to_csv('result/pagerank_weight.csv')
 
 
-#pagerank计算部分
-node_size = [i * 4000 for i in df_metrics['weighted_personalized_pagerank'].to_list()]
-node_size
+
+
 
 '''
 #pagerank计算结果的可视化
+node_size = [i * 4000 for i in df_metrics['weighted_personalized_pagerank'].to_list()]
+node_size
+
+
 weights = [i * 5 for i in df['weight'].tolist()]
 nx.draw_networkx_edges(G_weighted, pos, edge_color='#06D6A0', arrowsize=22, width=weights)
 nx.draw_networkx_nodes(G_weighted, pos,node_color='#EF476F', node_size=node_size)
