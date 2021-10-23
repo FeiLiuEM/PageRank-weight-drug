@@ -2,6 +2,8 @@ import pandas as pd
 import numpy as np
 import itertools
 
+from pandas.io.parsers import read_csv
+
 rank1=pd.read_csv('../result/pagerank_weight.csv')
 rank_list=rank1["urls"].values.tolist()
 #rank1.head(20)
@@ -54,9 +56,6 @@ drug_combination=list(itertools.combinations(all_drug, num_parallel))  #生成�
 
 #len(drug_combination)
 
-#len(all_drug)
-new_motrix.loc[new_motrix["drug"]==int("6")]
-
 #int(drug_combination[0][0])
 
 #drug_test_motrix=drug_test_motrix.append(new_motrix.loc[new_motrix["drug"]==int("6")])
@@ -69,6 +68,38 @@ for drug_test in drug_combination:
         a_drug=int(a_drug)
         drug_test_motrix=drug_test_motrix.append(new_motrix.loc[new_motrix["drug"]==a_drug])
         drug_test_motrix=drug_test_motrix.append(new_motrix.loc[new_motrix["protein"]==a_drug])
+
+
+    #pagerank计算部分
+    drug_test_motrix.columns=['source','target','weight']
+
+    df=drug_test_motrix
+
+    G=nx.from_pandas_edgelist(df, 'source', 'target', create_using=nx.DiGraph)
+
+    G_weighted=nx.from_pandas_edgelist(df, 'source', 'target', create_using=nx.DiGraph, edge_attr='weight')
+
+    weights = [i * 5 for i in df['weight'].tolist()]
+
+
+    #加权计算部分
+    simple_pagerank = nx.pagerank(G, alpha=0.85)
+    personalized_pagerank = nx.pagerank(G, alpha=0.85, personalization={'CIRP1':1.71134, 'CIRP2':1.71134, 'NQO1':1.552828, 'RBM3':0.20732618, 'SLC5A3':0, 'TXNIP':0.91961218})
+    nstart_pagerank = nx.pagerank(G, alpha=0.85, nstart={'CIRP1':1.71134, 'CIRP2':1.71134, 'NQO1':1.552828, 'RBM3':0.20732618, 'SLC5A3':0, 'TXNIP':0.91961218})
+    weighted_pagerank = nx.pagerank(G_weighted, alpha=0.85)
+    weighted_personalized_pagerank = nx.pagerank(G_weighted, alpha=0.85, personalization={'CIRP1':1.71134, 'CIRP2':1.71134, 'NQO1':1.552828, 'RBM3':0.20732618, 'SLC5A3':0, 'TXNIP':0.91961218})
+
+    df_metrics = pd.DataFrame(dict(
+        simple_pagerank = simple_pagerank,
+        personalized_pagerank = personalized_pagerank,
+        nstart_pagerank = nstart_pagerank,
+        weighted_pagerank = weighted_pagerank,
+        weighted_personalized_pagerank = weighted_personalized_pagerank,
+    ))
+    df_metrics.index.name='urls'
+    result1=df_metrics.sort_values(by='weighted_personalized_pagerank', ascending=False) 
+    result1.to_csv('result/pagerank_weight.csv')
+
 
 
 
