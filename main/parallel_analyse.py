@@ -100,16 +100,17 @@ for drug_test in drug_combination:
     df_metrics.index.name='urls'
     result1=df_metrics.sort_values(by='weighted_personalized_pagerank', ascending=False) 
     #result1.to_csv('result/pagerank_weight.csv')
-
-
-    result1.loc[a_drug,'weighted_personalized_pagerank']
-
+    
+    drug1=[]
+    parallel_num=[]
     for a_drug in drug_test:
         a_drug=int(a_drug)
-        drug1= result1.loc[a_drug,'weighted_personalized_pagerank']
-
+        drug1.append(a_drug)
+        parallel_num.append(result1.loc[a_drug,'weighted_personalized_pagerank'])
 
         parallel_motrix=parallel_motrix.append(result1.loc[a_drug])
 
+    parallel_num.append(sum(parallel_num))
+    parallel_num=drug1+parallel_num
 
-
+type(drug_test)
