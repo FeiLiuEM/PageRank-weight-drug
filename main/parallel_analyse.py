@@ -42,9 +42,6 @@ def parallel_rank(motrix, weight_dict, rank1, num_parallel, num_drug):
     new_motrix["drug"]=drug
     new_motrix["value"]=value
 
-
-    new_motrix.loc[new_motrix["drug"]==6]
-
     list(set(protein_change))
 
     #筛选出所有的类别
@@ -134,10 +131,13 @@ def parallel_rank(motrix, weight_dict, rank1, num_parallel, num_drug):
         parallel_num1=drug1+parallel_num1
 
         parallel_motrix=parallel_motrix.append(pd.DataFrame(pd.DataFrame(parallel_num1).values.T))
-        parallel_motrix=parallel_motrix.sort_values(by=6, ascending=False) 
+        parallel_motrix=parallel_motrix.sort_values(by=parallel_motrix.columns.tolist()[-1], ascending=False) 
     
-    parallel_motrix.columns=['drug1','drug2','value1','persentage1','value2','persentage2','pagerank_weight']
+
+    column1=list("drug" for i in range(num_parallel))
+    column2=['value','persentage']*num_parallel
+    column3=column1+column2+['pagerank_weight']
+    parallel_motrix.columns=column3
 
     return parallel_motrix
-
 
