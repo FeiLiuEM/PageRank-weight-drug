@@ -4,113 +4,136 @@ import itertools
 import networkx as nx
 
 
-#def parallel_rank(motrix, rank1, num_parallel, num_drug)
+def parallel_rank(motrix, weight_dict, rank1, num_parallel, num_drug):
 
-rank1=pd.read_csv('../result/pagerank_weight.csv')
-rank_list=rank1["urls"].values.tolist()
-#rank1.head(20)
+    '''
+    rank1=pd.read_csv('../result/pagerank_weight.csv')
 
-motrix=pd.read_csv("../data/motrix.csv")
-num_parallel=2 #多少种药物联合
-num_drug=50  #选取排名前XX的药物进行联合分析
+    weight_dict={'CIRP1':1.71134, 'CIRP2':1.71134, 'NQO1':1.552828, 'RBM3':0.20732618, 'SLC5A3':0, 'TXNIP':0.91961218}
 
-motrix.head()
+    #rank1.head(20)
 
+    motrix=pd.read_csv("../data/motrix.csv")
+    num_parallel=2 #多少种药物联合
+    num_drug=50  #选取排名前XX的药物进行联合分析
 
-protein_change=motrix["protein"].values.tolist()
+    motrix.head()
+    '''
+    #rank_list=rank1['urls'].tolist()
+    rank_list=rank1.index.tolist()
 
-drug_change=motrix["drug"].values.tolist()
+    protein_change=motrix["protein"].values.tolist()
 
-len_motrix=len(protein_change)
+    drug_change=motrix["drug"].values.tolist()
 
-value_change=[5 for x in range(0,len_motrix)]
+    len_motrix=len(protein_change)
 
-protein=motrix["protein"].values.tolist()+drug_change
-drug=motrix["drug"].values.tolist()+protein_change
-value=motrix["value"].values.tolist()+value_change
+    #value_change=[5 for x in range(0,len_motrix)]
+    value_change=[0.5*x for x in motrix["value"].values.tolist()]
 
-
-new_motrix=pd.DataFrame()
-
-new_motrix["protein"]=protein
-new_motrix["drug"]=drug
-new_motrix["value"]=value
-
-
-new_motrix.loc[new_motrix["drug"]==6]
-
-list(set(protein_change))
-
-#筛选出所有的类别
-all_protein = list(set(protein_change))
-#all_drug = list(set(drug_change)) #所有药物
-all_drug =  rank_list[len(all_protein)-1:len(all_protein)+num_drug-1]
-
-#进行排序
-all_protein.sort(key=protein_change.index)
-#all_drug.sort(key=drug1.index)
-#len(all_drug)
-
-#生成药物联合治疗的排列组合
-drug_combination=list(itertools.combinations(all_drug, num_parallel))  #生成药物联合治疗的排列组合
-
-#len(drug_combination)
-
-#int(drug_combination[0][0])
-
-#drug_test_motrix=drug_test_motrix.append(new_motrix.loc[new_motrix["drug"]==int("6")])
-
-parallel_motrix=pd.DataFrame()
-
-for drug_test in drug_combination:
-    drug_test_motrix=pd.DataFrame()
-
-    for a_drug in drug_test:
-        a_drug=int(a_drug)
-        drug_test_motrix=drug_test_motrix.append(new_motrix.loc[new_motrix["drug"]==a_drug])
-        drug_test_motrix=drug_test_motrix.append(new_motrix.loc[new_motrix["protein"]==a_drug])
+    protein=motrix["protein"].values.tolist()+drug_change
+    drug=motrix["drug"].values.tolist()+protein_change
+    value=motrix["value"].values.tolist()+value_change
 
 
-    #pagerank计算部分
-    drug_test_motrix.columns=['source','target','weight']
+    new_motrix=pd.DataFrame()
 
-    df=drug_test_motrix
-
-    G=nx.from_pandas_edgelist(df, 'source', 'target', create_using=nx.DiGraph)
-
-    G_weighted=nx.from_pandas_edgelist(df, 'source', 'target', create_using=nx.DiGraph, edge_attr='weight')
-
-    weights = [i * 5 for i in df['weight'].tolist()]
+    new_motrix["protein"]=protein
+    new_motrix["drug"]=drug
+    new_motrix["value"]=value
 
 
-    #加权计算部分
-    simple_pagerank = nx.pagerank(G, alpha=0.85)
-    personalized_pagerank = nx.pagerank(G, alpha=0.85, personalization={'CIRP1':1.71134, 'CIRP2':1.71134, 'NQO1':1.552828, 'RBM3':0.20732618, 'SLC5A3':0, 'TXNIP':0.91961218})
-    nstart_pagerank = nx.pagerank(G, alpha=0.85, nstart={'CIRP1':1.71134, 'CIRP2':1.71134, 'NQO1':1.552828, 'RBM3':0.20732618, 'SLC5A3':0, 'TXNIP':0.91961218})
-    weighted_pagerank = nx.pagerank(G_weighted, alpha=0.85)
-    weighted_personalized_pagerank = nx.pagerank(G_weighted, alpha=0.85, personalization={'CIRP1':1.71134, 'CIRP2':1.71134, 'NQO1':1.552828, 'RBM3':0.20732618, 'SLC5A3':0, 'TXNIP':0.91961218})
+    new_motrix.loc[new_motrix["drug"]==6]
 
-    df_metrics = pd.DataFrame(dict(
-        simple_pagerank = simple_pagerank,
-        personalized_pagerank = personalized_pagerank,
-        nstart_pagerank = nstart_pagerank,
-        weighted_pagerank = weighted_pagerank,
-        weighted_personalized_pagerank = weighted_personalized_pagerank,
-    ))
-    df_metrics.index.name='urls'
-    result1=df_metrics.sort_values(by='weighted_personalized_pagerank', ascending=False) 
-    #result1.to_csv('result/pagerank_weight.csv')
-    
-    drug1=[]
-    parallel_num=[]
-    for a_drug in drug_test:
-        a_drug=int(a_drug)
-        drug1.append(a_drug)
-        parallel_num.append(result1.loc[a_drug,'weighted_personalized_pagerank'])
+    list(set(protein_change))
 
-        parallel_motrix=parallel_motrix.append(result1.loc[a_drug])
+    #筛选出所有的类别
+    all_protein = list(set(protein_change))
+    #all_drug = list(set(drug_change)) #所有药物
+    all_drug =  rank_list[len(all_protein)-1:len(all_protein)+num_drug-1]
 
-    parallel_num.append(sum(parallel_num))
-    parallel_num=drug1+parallel_num
+    #进行排序
+    all_protein.sort(key=protein_change.index)
+    #all_drug.sort(key=drug1.index)
+    #len(all_drug)
 
-type(drug_test)
+    #生成药物联合治疗的排列组合
+    drug_combination=list(itertools.combinations(all_drug, num_parallel))  #生成药物联合治疗的排列组合
+
+    #len(drug_combination)
+
+    #int(drug_combination[0][0])
+
+    #drug_test_motrix=drug_test_motrix.append(new_motrix.loc[new_motrix["drug"]==int("6")])
+
+    parallel_motrix=pd.DataFrame()
+    parallel_debug=pd.DataFrame()
+
+    for drug_test in drug_combination:
+        drug_test_motrix=pd.DataFrame()
+
+        for a_drug in drug_test:
+            a_drug=int(a_drug)
+            drug_test_motrix=drug_test_motrix.append(new_motrix.loc[new_motrix["drug"]==a_drug])
+            drug_test_motrix=drug_test_motrix.append(new_motrix.loc[new_motrix["protein"]==a_drug])
+
+
+        #pagerank计算部分
+        drug_test_motrix.columns=['source','target','weight']
+        
+        df=pd.DataFrame()
+        df['source']=drug_test_motrix['source'].values.tolist()
+        df['target']=drug_test_motrix['target'].values.tolist()
+        df['weight']=drug_test_motrix['weight'].values.tolist()
+
+        G=nx.from_pandas_edgelist(df, 'source', 'target', create_using=nx.DiGraph)
+
+        G_weighted=nx.from_pandas_edgelist(df, 'source', 'target', create_using=nx.DiGraph, edge_attr='weight')
+
+        weights = [i * 5 for i in df['weight'].tolist()]
+
+
+        #加权计算部分
+        simple_pagerank = nx.pagerank(G, alpha=0.85)
+        personalized_pagerank = nx.pagerank(G, alpha=0.85, personalization=weight_dict)
+        nstart_pagerank = nx.pagerank(G, alpha=0.85, nstart=weight_dict)
+        weighted_pagerank = nx.pagerank(G_weighted, alpha=0.85)
+        weighted_personalized_pagerank = nx.pagerank(G_weighted, alpha=0.85, personalization=weight_dict)
+
+        df_metrics = pd.DataFrame(dict(
+            simple_pagerank = simple_pagerank,
+            personalized_pagerank = personalized_pagerank,
+            nstart_pagerank = nstart_pagerank,
+            weighted_pagerank = weighted_pagerank,
+            weighted_personalized_pagerank = weighted_personalized_pagerank,
+        ))
+        df_metrics.index.name='urls'
+        result1=df_metrics.sort_values(by='weighted_personalized_pagerank', ascending=False) 
+        #result1.to_csv('result/pagerank_weight.csv')
+
+        parallel_debug=parallel_debug.append(result1)
+        parallel_debug.head(20)
+
+        drug1=[]
+        parallel_num=[]
+        parallel_num1=[]
+        for a_drug in drug_test+protein[0]:
+            drug1.append(a_drug)
+            a_drug=int(a_drug)
+            
+            parallel_num.append(result1.loc[a_drug,'weighted_personalized_pagerank'])
+
+
+        for num in parallel_num+protein[0]:
+            parallel_num1.append(num)
+            parallel_num1.append(100*num/sum(parallel_num))
+
+        
+        parallel_num1.append(sum(parallel_num))
+        parallel_num1=drug1+parallel_num1
+
+        parallel_motrix=parallel_motrix.append(pd.DataFrame(pd.DataFrame(parallel_num1).values.T))
+
+    return parallel_motrix
+
+

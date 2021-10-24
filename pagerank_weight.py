@@ -11,8 +11,11 @@ import pandas as pd
 import numpy as np
 
 from main import xlsx2motrix
+from main import parallel_analyse
 
 motrix=xlsx2motrix.motrix_generate('./data/DATA.xlsx')
+
+weight_dict={'CIRP1':1.71134, 'CIRP2':1.71134, 'NQO1':1.552828, 'RBM3':0.20732618, 'SLC5A3':0, 'TXNIP':0.91961218}
 
 #motrix.to_csv("./data/motrix.csv")
 
@@ -40,10 +43,10 @@ plt.show()
 
 
 simple_pagerank = nx.pagerank(G, alpha=0.85)
-personalized_pagerank = nx.pagerank(G, alpha=0.85, personalization={'CIRP1':1.71134, 'CIRP2':1.71134, 'NQO1':1.552828, 'RBM3':0.20732618, 'SLC5A3':0, 'TXNIP':0.91961218})
-nstart_pagerank = nx.pagerank(G, alpha=0.85, nstart={'CIRP1':1.71134, 'CIRP2':1.71134, 'NQO1':1.552828, 'RBM3':0.20732618, 'SLC5A3':0, 'TXNIP':0.91961218})
+personalized_pagerank = nx.pagerank(G, alpha=0.85, personalization=weight_dict)
+nstart_pagerank = nx.pagerank(G, alpha=0.85, nstart=weight_dict)
 weighted_pagerank = nx.pagerank(G_weighted, alpha=0.85)
-weighted_personalized_pagerank = nx.pagerank(G_weighted, alpha=0.85, personalization={'CIRP1':1.71134, 'CIRP2':1.71134, 'NQO1':1.552828, 'RBM3':0.20732618, 'SLC5A3':0, 'TXNIP':0.91961218})
+weighted_personalized_pagerank = nx.pagerank(G_weighted, alpha=0.85, personalization=weight_dict)
 
 df_metrics = pd.DataFrame(dict(
     simple_pagerank = simple_pagerank,
@@ -54,11 +57,10 @@ df_metrics = pd.DataFrame(dict(
 ))
 df_metrics.index.name='urls'
 result1=df_metrics.sort_values(by='weighted_personalized_pagerank', ascending=False) 
-result1.to_csv('result/pagerank_weight.csv')
+#result1.to_csv('result/pagerank_weight.csv')
 
-
-
-
+type(result1)
+result1['urls']
 
 '''
 #pagerank计算结果的可视化
@@ -73,5 +75,18 @@ nx.draw_networkx_labels(G_weighted, pos, font_size=10, font_weight='bold', font_
 plt.gca().margins(0.1, 0.1)
 plt.show()
 '''
+
+
+#并行分析部分，parallel pagerank
+motrix.columns=['protein','drug','value']
+parallel_data=parallel_analyse.parallel_rank(motrix,weight_dict,result1,2,50)
+
+
+
+
+
+
+
+
 
 
