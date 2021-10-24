@@ -67,7 +67,7 @@ def parallel_rank(motrix, weight_dict, rank1, num_parallel, num_drug):
     #drug_test_motrix=drug_test_motrix.append(new_motrix.loc[new_motrix["drug"]==int("6")])
 
     parallel_motrix=pd.DataFrame()
-    parallel_debug=pd.DataFrame()
+    #parallel_debug=pd.DataFrame()
 
     for drug_test in drug_combination:
         drug_test_motrix=pd.DataFrame()
@@ -90,15 +90,15 @@ def parallel_rank(motrix, weight_dict, rank1, num_parallel, num_drug):
 
         G_weighted=nx.from_pandas_edgelist(df, 'source', 'target', create_using=nx.DiGraph, edge_attr='weight')
 
-        weights = [i * 5 for i in df['weight'].tolist()]
+        #weights = [i * 5 for i in df['weight'].tolist()]
 
 
         #加权计算部分
-        simple_pagerank = nx.pagerank(G, alpha=0.85)
-        personalized_pagerank = nx.pagerank(G, alpha=0.85, personalization=weight_dict)
-        nstart_pagerank = nx.pagerank(G, alpha=0.85, nstart=weight_dict)
-        weighted_pagerank = nx.pagerank(G_weighted, alpha=0.85)
-        weighted_personalized_pagerank = nx.pagerank(G_weighted, alpha=0.85, personalization=weight_dict)
+        simple_pagerank = nx.pagerank(G, alpha=0.88)
+        personalized_pagerank = nx.pagerank(G, alpha=0.88, personalization=weight_dict)
+        nstart_pagerank = nx.pagerank(G, alpha=0.88, nstart=weight_dict)
+        weighted_pagerank = nx.pagerank(G_weighted, alpha=0.88)
+        weighted_personalized_pagerank = nx.pagerank(G_weighted, alpha=0.88, personalization=weight_dict)
 
         df_metrics = pd.DataFrame(dict(
             simple_pagerank = simple_pagerank,
@@ -111,28 +111,32 @@ def parallel_rank(motrix, weight_dict, rank1, num_parallel, num_drug):
         result1=df_metrics.sort_values(by='weighted_personalized_pagerank', ascending=False) 
         #result1.to_csv('result/pagerank_weight.csv')
 
-        parallel_debug=parallel_debug.append(result1)
-        parallel_debug.head(20)
+        #parallel_debug=parallel_debug.append(result1)
+        #parallel_debug.head(20)
 
         drug1=[]
         parallel_num=[]
         parallel_num1=[]
-        for a_drug in drug_test+protein[0]:
+        for a_drug in drug_test:
             drug1.append(a_drug)
             a_drug=int(a_drug)
             
             parallel_num.append(result1.loc[a_drug,'weighted_personalized_pagerank'])
 
 
-        for num in parallel_num+protein[0]:
+        for num in parallel_num:
             parallel_num1.append(num)
             parallel_num1.append(100*num/sum(parallel_num))
 
         
-        parallel_num1.append(sum(parallel_num))
+        parallel_num1.append(sum(parallel_num)/(result1.loc[protein[0],'weighted_personalized_pagerank']))
+        #parallel_num1.append(result1.loc[protein[0],'weighted_personalized_pagerank'])
         parallel_num1=drug1+parallel_num1
 
         parallel_motrix=parallel_motrix.append(pd.DataFrame(pd.DataFrame(parallel_num1).values.T))
+        parallel_motrix=parallel_motrix.sort_values(by=6, ascending=False) 
+    
+    parallel_motrix.columns=['drug1','drug2','value1','persentage1','value2','persentage2','pagerank_weight']
 
     return parallel_motrix
 

@@ -42,11 +42,11 @@ plt.show()
 #设置权重
 
 
-simple_pagerank = nx.pagerank(G, alpha=0.85)
-personalized_pagerank = nx.pagerank(G, alpha=0.85, personalization=weight_dict)
-nstart_pagerank = nx.pagerank(G, alpha=0.85, nstart=weight_dict)
-weighted_pagerank = nx.pagerank(G_weighted, alpha=0.85)
-weighted_personalized_pagerank = nx.pagerank(G_weighted, alpha=0.85, personalization=weight_dict)
+simple_pagerank = nx.pagerank(G, alpha=0.9)
+personalized_pagerank = nx.pagerank(G, alpha=0.9, personalization=weight_dict)
+nstart_pagerank = nx.pagerank(G, alpha=0.9, nstart=weight_dict)
+weighted_pagerank = nx.pagerank(G_weighted, alpha=0.9)
+weighted_personalized_pagerank = nx.pagerank(G_weighted, alpha=0.9, personalization=weight_dict)
 
 df_metrics = pd.DataFrame(dict(
     simple_pagerank = simple_pagerank,
@@ -59,8 +59,7 @@ df_metrics.index.name='urls'
 result1=df_metrics.sort_values(by='weighted_personalized_pagerank', ascending=False) 
 #result1.to_csv('result/pagerank_weight.csv')
 
-type(result1)
-result1['urls']
+result1.head(20)
 
 '''
 #pagerank计算结果的可视化
@@ -80,10 +79,6 @@ plt.show()
 #并行分析部分，parallel pagerank
 motrix.columns=['protein','drug','value']
 parallel_data=parallel_analyse.parallel_rank(motrix,weight_dict,result1,2,50)
-
-
-
-
 
 
 
