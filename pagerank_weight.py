@@ -17,7 +17,7 @@ motrix=xlsx2motrix.motrix_generate('./data/DATA.xlsx')
 
 weight_dict={'CIRP1':1.71134, 'CIRP2':1.71134, 'NQO1':1.552828, 'RBM3':0.20732618, 'SLC5A3':0, 'TXNIP':0.91961218}
 
-#motrix.to_csv("./data/motrix.csv")
+#motrix.to_csv("./data/motrix.csv") 
 
 motrix.columns=['source','target','weight']
 
