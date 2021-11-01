@@ -55,6 +55,7 @@ df_metrics = pd.DataFrame(dict(
     weighted_pagerank = weighted_pagerank,
     weighted_personalized_pagerank = weighted_personalized_pagerank,
 ))
+
 df_metrics.index.name='urls'
 result1=df_metrics.sort_values(by='weighted_personalized_pagerank', ascending=False) 
 #result1.to_csv('result/pagerank_weight.csv')
