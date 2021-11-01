@@ -1,3 +1,5 @@
 # PageRank-weight-drug
 
-This is an application of weighted PageRank in drug development. It's based on PageRank by python library `networkx`.
+This is an application of weighted PageRank in drug development. It's based on PageRank by python library `networkx`. Author used it to evaluate the influence between drugs and disease/therapy.
+
+The data has two levels: 1. The docking data of proteins and drugs listed in `/data/DATA.csv`. 2. The expression of proteins under hypothermia therapy.
