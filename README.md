@@ -1,3 +1,3 @@
 # PageRank-weight-drug
 
-Weighted PageRank in drug development based on AI technology.
+This is an application of weighted PageRank in drug development. It's based on PageRank by python library `networkx`.
