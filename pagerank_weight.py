@@ -82,3 +82,5 @@ motrix.columns=['protein','drug','value']
 parallel_data=parallel_analyse.parallel_rank(motrix,weight_dict,result1,2,20)
 print(parallel_data.head())
 
+
+
