@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+from networkx.algorithms.link_analysis.pagerank_alg import pagerank
 %matplotlib inline
 plt.rcParams.update({
     'figure.figsize': (80, 80),
@@ -81,6 +82,4 @@ plt.show()
 motrix.columns=['protein','drug','value']
 parallel_data=parallel_analyse.parallel_rank(motrix,weight_dict,result1,2,20)
 print(parallel_data.head())
-
-
 
