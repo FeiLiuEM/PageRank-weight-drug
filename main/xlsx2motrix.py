@@ -36,13 +36,13 @@ def motrix_generate(file_path):
 
         test3=test2.sort_values(by='Column1', ascending=True) #药物名称排序统一
         
-        drug_list=test3.iloc[:,0].values.tolist()    #提取这个蛋白的药物排名
+        drug_list=test3.iloc[:,0].values.tolist()    #提取这个蛋白的药物列表
 
-        protein_value=test3.iloc[:,3].values.tolist()  #提取数据值
+        protein_value=test3.iloc[:,3].values.tolist()  #提取docking数据值
 
         #如果某些值小于特定值，则设定这个值为0
         for value in range(len(protein_value)):
-            if protein_value[value] < 5:
+            if protein_value[value] < 7:
                 protein_value[value]=0
 
         #sum=np.sum(protein_value)
@@ -70,6 +70,25 @@ def motrix_generate(file_path):
         list_drug.extend(all_drugs)
 
         list_value.extend(protein_value_end)
+
+        #添加蛋白到蛋白的数据
+        list_protein.extend([key])
+        list_drug.extend([key])
+        list_value.extend([100])
+
+        #添加药物到蛋白的数据
+        list_protein.extend(all_drugs)
+
+        list_drug.extend([key]*drug_len)
+
+        list_value.extend([0.9]*drug_len)
+
+        #添加药物到药物的数据
+        list_protein.extend(all_drugs)
+
+        list_drug.extend(all_drugs)
+
+        list_value.extend([0.1]*drug_len)        
         
         #motrix[key]=protein_value_end
 
