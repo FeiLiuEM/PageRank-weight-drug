@@ -1,6 +1,6 @@
 # PageRank-weight-drug
 
-This is an application of weighted PageRank in drug development based on python. It's based on PageRank by python library `networkx`. Author used it to evaluate the influence between drugs and disease/therapy.
+This is an application of weighted PageRank in drug development. It's based on PageRank by python library `networkx`. Author used it to evaluate the influence between drugs and disease/therapy.
 
 ## Requirement
 
