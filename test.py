@@ -17,7 +17,7 @@ from main import parallel_analyse
 
 motrix=pd.read_csv('./data/motrix_test.csv')
 
-weight_dict={'A':1, 'B':1, 'C':1,'D':1}
+weight_dict={'A':1, 'B':1, 'C':1}
 
 #motrix.to_csv("./data/motrix.csv") 
 
