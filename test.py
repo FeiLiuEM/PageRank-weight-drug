@@ -17,7 +17,7 @@ from main import parallel_analyse
 
 motrix=pd.read_csv('./data/motrix_test.csv')
 
-weight_dict={'A':1, 'B':1, 'C':1}
+weight_dict={'A':0.5, 'B':1, 'C':1}
 
 #motrix.to_csv("./data/motrix.csv") 
 
@@ -31,7 +31,7 @@ G_weighted=nx.from_pandas_edgelist(df, 'source', 'target', create_using=nx.DiGra
 
 weights = [i * 5 for i in df['weight'].tolist()]
 
-'''
+
 #可视化部分
 weights = [i * 5 for i in df['weight'].tolist()]
 
@@ -41,7 +41,7 @@ nx.draw_networkx_nodes(G, pos,node_color='#EF476F', node_size=1000)
 nx.draw_networkx_labels(G, pos, font_size=10, font_weight='bold', font_color='white')
 plt.gca().margins(0.1, 0.1)
 plt.show()
-'''
+
 
 #设置权重
 

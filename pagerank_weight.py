@@ -87,4 +87,4 @@ plt.show()
 motrix.columns=['protein','drug','value']
 parallel_data=parallel_analyse.parallel_rank(all_protein, motrix,weight_dict,result1,2,20)  #2代表联用药物数量，20代表前20的药物
 parallel_data.head(20)
-
+parallel_data.to_csv('result/parallel_pagerank_weight1.csv') #保存结果

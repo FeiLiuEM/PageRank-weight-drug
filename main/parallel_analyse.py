@@ -50,7 +50,7 @@ def parallel_rank(all_protein, motrix, weight_dict, rank1, num_parallel, num_dru
 
     parallel_motrix=pd.DataFrame()
     #parallel_debug=pd.DataFrame()
-    #drug_test=drug_combination[0]
+    #drug_test=drug_combination[1]
 
     for drug_test in drug_combination:
         drug_test_motrix=pd.DataFrame()
@@ -116,8 +116,9 @@ def parallel_rank(all_protein, motrix, weight_dict, rank1, num_parallel, num_dru
             parallel_num1.append(num)
             parallel_num1.append(100*num/sum(parallel_num))
 
-        
-        parallel_num1.append(sum(parallel_num)/(result1.loc[all_protein[0],'weighted_personalized_pagerank']))
+        parallel_num1.append(sum(parallel_num))
+
+        #parallel_num1.append(sum(parallel_num)/(result1.loc[protein[0],'weighted_personalized_pagerank']))
         #parallel_num1.append(result1.loc[protein[0],'weighted_personalized_pagerank'])
         parallel_num1=drug1+parallel_num1
 
