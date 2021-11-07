@@ -118,17 +118,28 @@ def parallel_rank(all_protein, motrix, weight_dict, rank1, num_parallel, num_dru
 
         parallel_num1.append(sum(parallel_num))
 
+        #这部分是分析药物联合跟最终结果的差异的
+        x=0
+        for protein in all_protein:
+            #protein='CIRP1'
+            rank=result1.loc[protein,'weighted_personalized_pagerank']
+            expression=weight_dict.get(protein)
+            x=x+rank*expression
+
+        resultx=sum(parallel_num)*x/result1.loc[all_protein[0],'weighted_personalized_pagerank']
+        parallel_num1.append(resultx)
+        x=0
         #parallel_num1.append(sum(parallel_num)/(result1.loc[protein[0],'weighted_personalized_pagerank']))
         #parallel_num1.append(result1.loc[protein[0],'weighted_personalized_pagerank'])
         parallel_num1=drug1+parallel_num1
 
         parallel_motrix=parallel_motrix.append(pd.DataFrame(pd.DataFrame(parallel_num1).values.T))
-        parallel_motrix=parallel_motrix.sort_values(by=parallel_motrix.columns.tolist()[-1], ascending=False) 
+        parallel_motrix=parallel_motrix.sort_values(by=parallel_motrix.columns.tolist()[-2], ascending=False) 
     
 
     column1=list("drug" for i in range(num_parallel))
     column2=['value','persentage']*num_parallel
-    column3=column1+column2+['pagerank_weight']
+    column3=column1+column2+['personalized_weight_pagerank','Drug-protein-expression fit score']
     parallel_motrix.columns=column3
 
     return parallel_motrix
