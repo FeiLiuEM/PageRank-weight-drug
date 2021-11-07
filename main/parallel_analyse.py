@@ -57,8 +57,15 @@ def parallel_rank(all_protein, motrix, weight_dict, rank1, num_parallel, num_dru
 
         for a_drug in drug_test:
             #a_drug=int(a_drug)
+            temp_df1=motrix.loc[motrix["protein"]==a_drug]
+            temp_list1=temp_df1['value'].tolist()
+            temp_list2=[20-i for i in temp_list1]
+            temp_df1['value']=temp_list2
+
+            drug_test_motrix=drug_test_motrix.append(temp_df1.loc[temp_df1["drug"]==a_drug])
+
+
             drug_test_motrix=drug_test_motrix.append(motrix.loc[motrix["drug"]==a_drug])
-            drug_test_motrix=drug_test_motrix.append(motrix.loc[motrix["protein"]==a_drug])
             #drug_test_motrix=drug_test_motrix.append(motrix.loc[motrix["drug"]=='5282330'])
             #drug_test_motrix=drug_test_motrix.append(motrix.loc[motrix["protein"]=='5282330'])
             drug_test_motrix=drug_test_motrix.drop_duplicates(subset=['protein','drug'])

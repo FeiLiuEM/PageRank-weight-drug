@@ -99,7 +99,7 @@ def motrix_generate(file_path):
         #添加蛋白到蛋白的数据
         list_protein.extend([key])
         list_drug.extend([key])
-        list_value.extend([20])
+        list_value.extend([10])
 
         
         #motrix[key]=protein_value_end
@@ -113,7 +113,7 @@ def motrix_generate(file_path):
 
     list_drug.extend(all_drugs)
 
-    list_value.extend([20]*drug_len) 
+    list_value.extend([10]*drug_len) 
 
     motrix['protein']=list_protein
     motrix['durg']=list_drug
