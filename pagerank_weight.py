@@ -16,7 +16,7 @@ from main import parallel_analyse
 
 motrix=xlsx2motrix.motrix_generate('./data/DATA.xlsx')
 
-weight_dict={'CIRP1':1.71134, 'CIRP2':1.71134, 'NQO1':1.552828, 'RBM3':0.20732618, 'SLC5A3':0, 'TXNIP':0.91961218}
+weight_dict={'CIRP1':3.2746, 'CIRP2':3.2746, 'NQO1':2.9339, 'RBM3':1.154546, 'SLC5A3':0.5, 'TXNIP':1.8916067}
 
 #motrix.to_csv("./data/motrix.csv") 
 

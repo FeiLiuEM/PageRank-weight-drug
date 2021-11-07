@@ -2,7 +2,10 @@ import pandas as pd
 import numpy as np
 
 #读取原始数据
-#data=pd.read_csv("/Users/liufei/DATA/AutoDock/DATA_TOTAL.csv")
+#data=pd.read_excel("../data/DATA.xlsx",sheet_name=None)
+#data_protein=data.get('CIRP1')
+#data_protein.loc[data_protein["Column1"]==all_drugs[0]].values.tolist()[0][2]
+#test3.loc[test3["Column1"]==all_drugs[0]].values.tolist()[0][2]
 
 all_drugs=pd.read_csv("./data/all_drugs.csv").iloc[:,0].values.tolist()
 drug_len=len(all_drugs)
@@ -28,6 +31,8 @@ def motrix_generate(file_path):
     for key in data:
         data_protein=data.get(key)
 
+        keys.extend(key)
+
 
 
         test1=data_protein.sort_values(by='Column3', ascending=True) #按数值排序
@@ -42,7 +47,7 @@ def motrix_generate(file_path):
 
         #如果某些值小于特定值，则设定这个值为0
         for value in range(len(protein_value)):
-            if protein_value[value] < 7:
+            if protein_value[value] < 1:
                 protein_value[value]=0
 
         #sum=np.sum(protein_value)
@@ -58,6 +63,18 @@ def motrix_generate(file_path):
             if drug_x not in drug_list:
                 drug_list.append(drug_x)
                 protein_value.append(0)
+            #添加药物到蛋白的数据
+            list_protein.extend([drug_x])
+
+            list_drug.extend([key])
+
+            a=test3.loc[test3["Column1"]==drug_x].values.tolist()[0][3]
+            if a < 1:
+                b=1
+            else:
+                b=1/a
+            list_value.extend([b])   #添加药物到蛋白的数据
+
 
         protein_data_df=pd.DataFrame({'drug':drug_list,'protein':protein_value})
 
@@ -76,19 +93,6 @@ def motrix_generate(file_path):
         list_drug.extend([key])
         list_value.extend([100])
 
-        #添加药物到蛋白的数据
-        list_protein.extend(all_drugs)
-
-        list_drug.extend([key]*drug_len)
-
-        list_value.extend([0.9]*drug_len)
-
-        #添加药物到药物的数据
-        list_protein.extend(all_drugs)
-
-        list_drug.extend(all_drugs)
-
-        list_value.extend([0.1]*drug_len)        
         
         #motrix[key]=protein_value_end
 
@@ -96,13 +100,20 @@ def motrix_generate(file_path):
 
     #motrix.index=all_drugs
 
+    #添加药物到药物的数据   
+    list_protein.extend(all_drugs)
+
+    list_drug.extend(all_drugs)
+
+    list_value.extend([0.5]*drug_len) 
+
     motrix['protein']=list_protein
     motrix['durg']=list_drug
     motrix['value']=list_value
 
     return motrix
 
-
+#motrix.to_csv("../data/motrix.csv",index=False)
 
 #test=motrix_generate("../data/DATA.xlsx")
 
