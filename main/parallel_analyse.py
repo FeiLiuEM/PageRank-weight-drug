@@ -4,58 +4,43 @@ import itertools
 import networkx as nx
 
 
-def parallel_rank(motrix, weight_dict, rank1, num_parallel, num_drug):
+def parallel_rank(all_protein, motrix, weight_dict, rank1, num_parallel, num_drug):
 
     '''
+    all_protein=pd.read_csv('../data/all_protein.csv')['0'].values.tolist()
+    all_drug=pd.read_csv('../data/all_drug.csv')['0'].values.tolist()
+
+
+
     rank1=pd.read_csv('../result/pagerank_weight.csv')
 
-    weight_dict={'CIRP1':1.71134, 'CIRP2':1.71134, 'NQO1':1.552828, 'RBM3':0.20732618, 'SLC5A3':0, 'TXNIP':0.91961218}
+    weight_dict={'CIRP1':3.2746, 'CIRP2':3.2746, 'NQO1':2.9339, 'RBM3':1.154546, 'SLC5A3':0.5, 'TXNIP':1.8916067}
 
     #rank1.head(20)
 
     motrix=pd.read_csv("../data/motrix.csv")
+    motrix.columns=['protein','drug','value']
     num_parallel=2 #多少种药物联合
     num_drug=50  #选取排名前XX的药物进行联合分析
 
     motrix.head()
     '''
     #rank_list=rank1['urls'].tolist()
+
+    drug2drug=pd.DataFrame(dict(
+    protein=all_protein,
+    drug=all_protein,
+    value=[10]*len(all_protein)
+    ))
+
     rank_list=rank1.index.tolist()
 
-    protein_change=motrix["protein"].values.tolist()
+    selected_drug=rank_list[len(all_protein):len(all_protein)+num_drug]
 
-    drug_change=motrix["drug"].values.tolist()
-
-    len_motrix=len(protein_change)
-
-    #value_change=[5 for x in range(0,len_motrix)]
-    value_change=[0.5*x for x in motrix["value"].values.tolist()]
-
-    protein=motrix["protein"].values.tolist()+drug_change
-    drug=motrix["drug"].values.tolist()+protein_change
-    value=motrix["value"].values.tolist()+value_change
-
-
-    new_motrix=pd.DataFrame()
-
-    new_motrix["protein"]=protein
-    new_motrix["drug"]=drug
-    new_motrix["value"]=value
-
-    list(set(protein_change))
-
-    #筛选出所有的类别
-    all_protein = list(set(protein_change))
-    #all_drug = list(set(drug_change)) #所有药物
-    all_drug =  rank_list[len(all_protein)-1:len(all_protein)+num_drug-1]
-
-    #进行排序
-    all_protein.sort(key=protein_change.index)
-    #all_drug.sort(key=drug1.index)
-    #len(all_drug)
+    #len(selected_drug)
 
     #生成药物联合治疗的排列组合
-    drug_combination=list(itertools.combinations(all_drug, num_parallel))  #生成药物联合治疗的排列组合
+    drug_combination=list(itertools.combinations(selected_drug, num_parallel))  #生成药物联合治疗的排列组合
 
     #len(drug_combination)
 
@@ -65,14 +50,20 @@ def parallel_rank(motrix, weight_dict, rank1, num_parallel, num_drug):
 
     parallel_motrix=pd.DataFrame()
     #parallel_debug=pd.DataFrame()
+    #drug_test=drug_combination[0]
 
     for drug_test in drug_combination:
         drug_test_motrix=pd.DataFrame()
 
         for a_drug in drug_test:
-            a_drug=int(a_drug)
-            drug_test_motrix=drug_test_motrix.append(new_motrix.loc[new_motrix["drug"]==a_drug])
-            drug_test_motrix=drug_test_motrix.append(new_motrix.loc[new_motrix["protein"]==a_drug])
+            #a_drug=int(a_drug)
+            drug_test_motrix=drug_test_motrix.append(motrix.loc[motrix["drug"]==a_drug])
+            drug_test_motrix=drug_test_motrix.append(motrix.loc[motrix["protein"]==a_drug])
+            #drug_test_motrix=drug_test_motrix.append(motrix.loc[motrix["drug"]=='5282330'])
+            #drug_test_motrix=drug_test_motrix.append(motrix.loc[motrix["protein"]=='5282330'])
+            drug_test_motrix=drug_test_motrix.drop_duplicates(subset=['protein','drug'])
+
+        drug_test_motrix=drug_test_motrix.append(drug2drug)
 
 
         #pagerank计算部分
@@ -116,7 +107,7 @@ def parallel_rank(motrix, weight_dict, rank1, num_parallel, num_drug):
         parallel_num1=[]
         for a_drug in drug_test:
             drug1.append(a_drug)
-            a_drug=int(a_drug)
+            #a_drug=int(a_drug)
             
             parallel_num.append(result1.loc[a_drug,'weighted_personalized_pagerank'])
 
@@ -126,7 +117,7 @@ def parallel_rank(motrix, weight_dict, rank1, num_parallel, num_drug):
             parallel_num1.append(100*num/sum(parallel_num))
 
         
-        parallel_num1.append(sum(parallel_num)/(result1.loc[protein[0],'weighted_personalized_pagerank']))
+        parallel_num1.append(sum(parallel_num)/(result1.loc[all_protein[0],'weighted_personalized_pagerank']))
         #parallel_num1.append(result1.loc[protein[0],'weighted_personalized_pagerank'])
         parallel_num1=drug1+parallel_num1
 

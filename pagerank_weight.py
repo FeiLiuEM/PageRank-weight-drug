@@ -14,7 +14,12 @@ import numpy as np
 from main import xlsx2motrix
 from main import parallel_analyse
 
-motrix=xlsx2motrix.motrix_generate('./data/DATA.xlsx')
+#data=pd.read_excel('./data/DATA.xlsx')
+
+all_protein, all_drug, motrix=xlsx2motrix.motrix_generate('./data/DATA.xlsx')
+
+#pd.DataFrame(all_protein).to_csv('./data/all_protein.csv',index=False)
+#pd.DataFrame(all_drug).to_csv('./data/all_drug.csv',index=False)
 
 weight_dict={'CIRP1':3.2746, 'CIRP2':3.2746, 'NQO1':2.9339, 'RBM3':1.154546, 'SLC5A3':0.5, 'TXNIP':1.8916067}
 
@@ -47,7 +52,7 @@ simple_pagerank = nx.pagerank(G, alpha=0.9)
 personalized_pagerank = nx.pagerank(G, alpha=0.9, personalization=weight_dict)
 nstart_pagerank = nx.pagerank(G, alpha=0.9, nstart=weight_dict)
 weighted_pagerank = nx.pagerank(G_weighted, alpha=0.9)
-weighted_personalized_pagerank = nx.pagerank(G_weighted, alpha=0.9, personalization=weight_dict)
+weighted_personalized_pagerank = nx.pagerank(G_weighted, alpha=0.9, personalization=weight_dict,max_iter=10000,tol=1e-7)
 
 df_metrics = pd.DataFrame(dict(
     simple_pagerank = simple_pagerank,
@@ -80,6 +85,6 @@ plt.show()
 
 #并行分析部分，parallel pagerank
 motrix.columns=['protein','drug','value']
-parallel_data=parallel_analyse.parallel_rank(motrix,weight_dict,result1,2,20)
+parallel_data=parallel_analyse.parallel_rank(all_protein, motrix,weight_dict,result1,2,20)  #2代表联用药物数量，20代表前20的药物
 print(parallel_data.head())
 
