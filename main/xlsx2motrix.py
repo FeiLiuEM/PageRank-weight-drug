@@ -1,3 +1,10 @@
+##########################
+#  Designed by Fei Liu.
+#     code = UTF-8
+##########################
+
+#This is a function to generate the motrix for the drug-protein interaction.
+
 import pandas as pd
 import numpy as np
 

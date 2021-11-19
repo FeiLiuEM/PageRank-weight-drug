@@ -4,11 +4,11 @@ This is an application of weighted PageRank in drug development. It's based on P
 
 ## Requirement
 
-nxwork
+NetworkX
 
-pandas
+Pandas
 
-numpy
+NumPy
 
 ## Structure
 
