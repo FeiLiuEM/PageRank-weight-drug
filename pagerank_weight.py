@@ -134,5 +134,10 @@ for i in range(num_drug):
         if drug_name1 is None:
             drug_name1=drug1
         drug_list1.append(drug_name1)
-    drug_dataframe.loc[:,i]=drug_list1
-    parallel_data1.loc[:,i]=drug_list1
+    drug_dataframe.loc[:,str(i+1)]=drug_list1
+
+parallel_data2=pd.concat([drug_dataframe,parallel_data1],axis=1)
+
+parallel_data3=parallel_data2.drop('drug', axis='columns') # 删除列 
+
+parallel_data3.head(20)
