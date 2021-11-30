@@ -16,7 +16,8 @@ from main import parallel_analyse
 
 #data=pd.read_excel('./data/DATA.xlsx')
 
-all_protein, all_drug, motrix=xlsx2motrix.motrix_generate('./data/DATA_0_5h.xlsx')
+all_protein, data, motrix=xlsx2motrix.motrix_generate('./data/DATA_0_5h.xlsx')
+
 
 #pd.DataFrame(all_protein).to_csv('./data/all_protein.csv',index=False)
 #pd.DataFrame(all_drug).to_csv('./data/all_drug.csv',index=False)
@@ -74,6 +75,10 @@ result1=df_metrics.sort_values(by='weighted_personalized_pagerank', ascending=Fa
 
 result1.head(20)
 
+#翻译模块
+
+
+
 '''
 #pagerank计算结果的可视化
 node_size = [i * 4000 for i in df_metrics['weighted_personalized_pagerank'].to_list()]
@@ -91,7 +96,7 @@ plt.show()
 
 #并行分析部分，parallel pagerank
 motrix.columns=['protein','drug','value']
-parallel_data=parallel_analyse.parallel_rank(all_protein, motrix,weight_dict,result1,2,20)  #2代表联用药物数量，20代表前20的药物
+parallel_data=parallel_analyse.parallel_rank(all_protein, data, motrix,weight_dict,result1,2,20)  #2代表联用药物数量，20代表前20的药物
 parallel_data.head(20)
 #parallel_data.to_csv('result/parallel_pagerank_weight1.csv') #保存结果
 

@@ -4,7 +4,7 @@ import itertools
 import networkx as nx
 
 
-def parallel_rank(all_protein, motrix, weight_dict, rank1, num_parallel, num_drug):
+def parallel_rank(all_protein, data, motrix, weight_dict, rank1, num_parallel, num_drug):
 
     '''
     all_protein=pd.read_csv('../data/all_protein.csv')['0'].values.tolist()
@@ -35,7 +35,15 @@ def parallel_rank(all_protein, motrix, weight_dict, rank1, num_parallel, num_dru
 
     rank_list=rank1.index.tolist()
 
-    selected_drug=rank_list[len(all_protein):len(all_protein)+num_drug]
+    selected_drug1=rank_list[len(all_protein):len(all_protein)+num_drug]
+
+    #筛选每个蛋白排名靠前的药物
+    drug_each_protein=[]
+    for key in data:
+        data_protein=data.get(key)
+        drug_each_protein+=data_protein['drug'][:num_drug].values.tolist()
+
+    selected_drug=list(set(drug_each_protein+selected_drug1))
 
     #len(selected_drug)
 

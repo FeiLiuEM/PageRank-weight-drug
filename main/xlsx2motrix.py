@@ -23,7 +23,7 @@ drug_len=len(all_drugs)
 def motrix_generate(file_path):
     data=pd.read_excel(file_path,sheet_name=None)
 
-    keys=[]
+    proteins=[]
     protein_len=0
 
     motrix=pd.DataFrame()
@@ -38,7 +38,7 @@ def motrix_generate(file_path):
     for key in data:
         data_protein=data.get(key)
 
-        keys.append(key)
+        proteins.append(key)
 
 
 
@@ -126,7 +126,7 @@ def motrix_generate(file_path):
     motrix['durg']=list_drug
     motrix['value']=list_value
 
-    return keys, all_drugs, motrix
+    return proteins, data, motrix
 
 #motrix.to_csv("../data/motrix.csv",index=False)
 
