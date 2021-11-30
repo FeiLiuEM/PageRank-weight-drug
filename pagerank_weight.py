@@ -16,13 +16,19 @@ from main import parallel_analyse
 
 #data=pd.read_excel('./data/DATA.xlsx')
 
-all_protein, all_drug, motrix=xlsx2motrix.motrix_generate('./data/DATA.xlsx')
+all_protein, all_drug, motrix=xlsx2motrix.motrix_generate('./data/DATA_0_5h.xlsx')
 
 #pd.DataFrame(all_protein).to_csv('./data/all_protein.csv',index=False)
 #pd.DataFrame(all_drug).to_csv('./data/all_drug.csv',index=False)
 
-weight_dict={'CIRP1':3.2746, 'CIRP2':3.2746, 'NQO1':2.9339, 'RBM3':1.154546, 'SLC5A3':0.5, 'TXNIP':1.8916067}
+weight_dict_0_5h={'ciart':1.3792, 'chac1':1.3437, 'nudt22':1.3199}
+weight_dict_1h={'cdsn':1.43, 'nr1d1':1.4181, 'chac1':1.4093}
+weight_dict_2h={'cirp':1.7468, 'armcx5':1.583, 'ccdc122':1.4073}
+weight_dict_4h={'cirp':2.2545, 'ramp3':1.8776, 'ceacam1':1.8247}
+weight_dict_8h={'cirp':2.9716, 'ramp3':2.5125, 'nqo1':2.2651}
+weight_dict_18h={'cirp':3.2746, 'ramp3':2.5017, 'nqo1':2.9339}
 
+weight_dict=weight_dict_0_5h
 #motrix.to_csv("./data/motrix.csv") 
 
 motrix.columns=['source','target','weight']
@@ -48,16 +54,16 @@ plt.show()
 #设置权重
 
 
-simple_pagerank = nx.pagerank(G, alpha=0.9)
-personalized_pagerank = nx.pagerank(G, alpha=0.9, personalization=weight_dict)
-nstart_pagerank = nx.pagerank(G, alpha=0.9, nstart=weight_dict)
-weighted_pagerank = nx.pagerank(G_weighted, alpha=0.9)
-weighted_personalized_pagerank = nx.pagerank(G_weighted, alpha=0.9, personalization=weight_dict,max_iter=10000,tol=1e-7)
+simple_pagerank = nx.pagerank(G, alpha=0.85)
+personalized_pagerank = nx.pagerank(G, alpha=0.85, personalization=weight_dict)
+#nstart_pagerank = nx.pagerank(G, alpha=0.85, nstart=weight_dict)
+weighted_pagerank = nx.pagerank(G_weighted, alpha=0.85)
+weighted_personalized_pagerank = nx.pagerank(G_weighted, alpha=0.85, personalization=weight_dict,max_iter=1000,tol=1e-6)
 
 df_metrics = pd.DataFrame(dict(
     simple_pagerank = simple_pagerank,
     personalized_pagerank = personalized_pagerank,
-    nstart_pagerank = nstart_pagerank,
+    #nstart_pagerank = nstart_pagerank,
     weighted_pagerank = weighted_pagerank,
     weighted_personalized_pagerank = weighted_personalized_pagerank,
 ))

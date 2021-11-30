@@ -91,14 +91,14 @@ def parallel_rank(all_protein, motrix, weight_dict, rank1, num_parallel, num_dru
         #加权计算部分
         simple_pagerank = nx.pagerank(G, alpha=0.88)
         personalized_pagerank = nx.pagerank(G, alpha=0.88, personalization=weight_dict)
-        nstart_pagerank = nx.pagerank(G, alpha=0.88, nstart=weight_dict)
+        #nstart_pagerank = nx.pagerank(G, alpha=0.88, nstart=weight_dict)
         weighted_pagerank = nx.pagerank(G_weighted, alpha=0.88)
         weighted_personalized_pagerank = nx.pagerank(G_weighted, alpha=0.88, personalization=weight_dict)
 
         df_metrics = pd.DataFrame(dict(
             simple_pagerank = simple_pagerank,
             personalized_pagerank = personalized_pagerank,
-            nstart_pagerank = nstart_pagerank,
+            #nstart_pagerank = nstart_pagerank,
             weighted_pagerank = weighted_pagerank,
             weighted_personalized_pagerank = weighted_personalized_pagerank,
         ))

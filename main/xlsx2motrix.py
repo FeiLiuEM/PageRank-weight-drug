@@ -11,13 +11,13 @@ import numpy as np
 #读取原始数据
 #data=pd.read_excel("../data/DATA.xlsx",sheet_name=None)
 #data_protein=data.get('CIRP1')
-#data_protein.loc[data_protein["Column1"]==all_drugs[0]].values.tolist()[0][2]
-#test3.loc[test3["Column1"]==all_drugs[0]].values.tolist()[0][2]
+#data_protein.loc[data_protein["drug"]==all_drugs[0]].values.tolist()[0][2]
+#test3.loc[test3["drug"]==all_drugs[0]].values.tolist()[0][2]
 
 all_drugs=pd.read_csv("./data/all_drugs.csv").iloc[:,0].values.tolist()
 drug_len=len(all_drugs)
 
-#data.get("CIRP1")["Column3"]
+#data.get("CIRP1")["value"]
 
 
 def motrix_generate(file_path):
@@ -42,11 +42,11 @@ def motrix_generate(file_path):
 
 
 
-        test1=data_protein.sort_values(by='Column3', ascending=True) #按数值排序
-        test2=test1.drop_duplicates(subset=['Column1'])   #去重
-        test2["Column4"] = 0-test2["Column3"]        #获取正值
+        test1=data_protein.sort_values(by='value', ascending=True) #按数值排序
+        test2=test1.drop_duplicates(subset=['drug'])   #去重
+        test2["x1"] = 0-test2["value"]        #获取正值
 
-        test3=test2.sort_values(by='Column1', ascending=True) #药物名称排序统一
+        test3=test2.sort_values(by='drug', ascending=True) #药物名称排序统一
         
         drug_list=test3.iloc[:,0].values.tolist()    #提取这个蛋白的药物列表
 
@@ -75,7 +75,7 @@ def motrix_generate(file_path):
 
             #list_drug.extend([key])
 
-            #a=test3.loc[test3["Column1"]==drug_x].values.tolist()[0][3]
+            #a=test3.loc[test3["drug"]==drug_x].values.tolist()[0][3]
             #if a < 1:
             #    b=1
             #else:
