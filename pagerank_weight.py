@@ -10,6 +10,7 @@ plt.rcParams.update({
 import networkx as nx
 import pandas as pd
 import numpy as np
+import pickle
 
 from main import xlsx2motrix
 from main import parallel_analyse
@@ -75,9 +76,25 @@ result1=df_metrics.sort_values(by='weighted_personalized_pagerank', ascending=Fa
 
 result1.head(20)
 
+
 #翻译模块
+f_read = open('./data/dict_file.pkl', 'rb')
+dict = pickle.load(f_read)
+#print(dict)
+f_read.close()
 
+translation=result1.index.values.tolist()
+drug_list=[]
 
+for drug in translation:
+    drug_name=dict.get(str(drug))
+    if drug_name is None:
+        drug_name=drug
+    drug_list.append(drug_name)
+
+result2=result1.sort_values(by='weighted_personalized_pagerank', ascending=False) 
+result2.index=drug_list
+result2.head(20)
 
 '''
 #pagerank计算结果的可视化
@@ -100,3 +117,22 @@ parallel_data=parallel_analyse.parallel_rank(all_protein, data, motrix,weight_di
 parallel_data.head(20)
 #parallel_data.to_csv('result/parallel_pagerank_weight1.csv') #保存结果
 
+parallel_data1=parallel_data.sort_values(by='personalized_weight_pagerank', ascending=False)
+
+num_drug=len(parallel_data['drug'].columns)
+
+#len(parallel_data['drug'].values[:,0].tolist())
+
+drug_dataframe=pd.DataFrame(index=parallel_data.index)
+
+for i in range(num_drug):
+    #i=0
+    drug_list1=[]
+    rank1=parallel_data['drug'].values[:,i].tolist()
+    for drug1 in rank1:
+        drug_name1=dict.get(str(int(drug1)))
+        if drug_name1 is None:
+            drug_name1=drug1
+        drug_list1.append(drug_name1)
+    drug_dataframe.loc[:,i]=drug_list1
+    parallel_data1.loc[:,i]=drug_list1
