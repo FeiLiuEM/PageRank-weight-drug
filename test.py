@@ -46,10 +46,10 @@ plt.show()
 #设置权重
 
 
-#simple_pagerank = nx.pagerank(G, alpha=0.9)
-#personalized_pagerank = nx.pagerank(G, alpha=0.9, personalization=weight_dict)
-#nstart_pagerank = nx.pagerank(G, alpha=0.9, nstart=weight_dict)
-#weighted_pagerank = nx.pagerank(G_weighted, alpha=0.9)
-weighted_personalized_pagerank = nx.pagerank(G_weighted, alpha=0.9, personalization=weight_dict,max_iter=10000,tol=1e-7)
+simple_pagerank = nx.pagerank(G, alpha=0.85)
+personalized_pagerank = nx.pagerank(G, alpha=0.85, personalization=weight_dict)
+nstart_pagerank = nx.pagerank(G, alpha=0.85, nstart=weight_dict)
+weighted_pagerank = nx.pagerank(G_weighted, alpha=0.85)
+weighted_personalized_pagerank = nx.pagerank(G_weighted, alpha=0.85, personalization=weight_dict,max_iter=10000,tol=1e-7)
 
 print(weighted_personalized_pagerank)
