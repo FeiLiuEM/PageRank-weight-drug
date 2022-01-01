@@ -21,11 +21,19 @@ weight_dict_1h={'cdsn':1.43, 'nr1d1':1.4181, 'chac1':1.4093}
 weight_dict_2h={'cirp':1.7468, 'armcx5':1.583, 'ccdc122':1.4073}
 weight_dict_4h={'cirp':2.2545, 'ramp3':1.8776, 'ceacam1':1.8247}
 weight_dict_8h={'cirp':2.9716, 'ramp3':2.5125, 'nqo1':2.2651}
-weight_dict_18h={'cirp':3.2746, 'ramp3':2.5017, 'nqo1':2.9339}
+weight_dict_18h={'cirp':3.2746, 'ramp3':-2.5017, 'nqo1':2.9339}
 
-weight_dict=weight_dict_18h
+weight_dict1_0_5h={'ciart':8.0218, 'chac1':9.642, 'nudt22':9.4038}
+weight_dict1_1h={'cdsn':8.167, 'nr1d1':10.6623, 'chac1':9.7105}
+weight_dict1_2h={'cirp':9.4334, 'armcx5':5.9664, 'ccdc122':8.0592}
+weight_dict1_4h={'cirp':9.8015, 'ramp3':9.0459, 'ceacam1':7.111}
+weight_dict1_8h={'cirp':10.2, 'ramp3':9.4661, 'nqo1':10.8736}
+weight_dict1_18h={'cirp':10.34, 'ramp3':9.4599, 'nqo1':11.2469}
 
-group='_18h'
+
+weight_dict=weight_dict_0_5h
+weight_dict1=weight_dict1_0_5h
+group='_0_5h'
 save_result='./result/h'+group+'.xlsx'
 open_data='./data/DATA'+group+'.xlsx'
 
@@ -61,6 +69,22 @@ def get_translate(dict1,parallel_data):
 
 all_protein, data, motrix=xlsx2motrix.motrix_generate(open_data)
 
+#补全nstart的药物部分字典值
+all_drug_pd=pd.read_csv('./data/all_drugs.csv')
+all_drug=all_drug_pd['drugs'].values.tolist()
+all_drug_nstart=[0]*len(all_drug)
+dict_drug=dict(zip(all_drug,all_drug_nstart))
+#weight_dictx1=weight_dict1
+#weight_dictx1.update(dict_drug)
+
+weight_dictx1={}
+for k,v in weight_dict1.items():
+    weight_dictx1[k]=v
+
+for k,v in dict_drug.items():
+    weight_dictx1[k]=v
+
+
 
 #pd.DataFrame(all_protein).to_csv('./data/all_protein.csv',index=False)
 #pd.DataFrame(all_drug).to_csv('./data/all_drug.csv',index=False)
@@ -94,7 +118,7 @@ simple_pagerank = nx.pagerank(G, alpha=0.85)
 personalized_pagerank = nx.pagerank(G, alpha=0.85, personalization=weight_dict)
 #nstart_pagerank = nx.pagerank(G, alpha=0.85, nstart=weight_dict)
 weighted_pagerank = nx.pagerank(G_weighted, alpha=0.85)
-weighted_personalized_pagerank = nx.pagerank(G_weighted, alpha=0.85, personalization=weight_dict,max_iter=1000,tol=1e-6)
+weighted_personalized_pagerank = nx.pagerank(G_weighted, alpha=0.85, personalization=weight_dict,nstart=weight_dictx1,max_iter=10000,tol=1e-7)
 
 df_metrics = pd.DataFrame(dict(
     simple_pagerank = simple_pagerank,
@@ -147,10 +171,10 @@ plt.show()
 
 #并行分析部分，parallel pagerank
 motrix.columns=['protein','drug','value']
-parallel_data_2=parallel_analyse.parallel_rank(all_protein, data, motrix,weight_dict,result1,2,20)  #2代表联用药物数量，20代表前20的药物
+parallel_data_2=parallel_analyse.parallel_rank(all_protein, data, motrix,weight_dict,weight_dict1,result1,2,20)  #2代表联用药物数量，20代表前20的药物
 parallel_data_2.head(20)
 
-parallel_data_3=parallel_analyse.parallel_rank(all_protein, data, motrix,weight_dict,result1,3,10)  #2代表联用药物数量，20代表前20的药物
+parallel_data_3=parallel_analyse.parallel_rank(all_protein, data, motrix,weight_dict,weight_dict1,result1,3,10)  #2代表联用药物数量，20代表前20的药物
 parallel_data_3.head(20)
 #parallel_data.to_csv('result/parallel_pagerank_weight1.csv') #保存结果
 

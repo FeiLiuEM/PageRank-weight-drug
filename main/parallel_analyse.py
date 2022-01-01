@@ -4,7 +4,7 @@ import itertools
 import networkx as nx
 
 
-def parallel_rank(all_protein, data, motrix, weight_dict, rank1, num_parallel, num_drug):
+def parallel_rank(all_protein, data, motrix, weight_dict, weight_dict1, rank1, num_parallel, num_drug):
 
     '''
     all_protein=pd.read_csv('../data/all_protein.csv')['0'].values.tolist()
@@ -63,6 +63,8 @@ def parallel_rank(all_protein, data, motrix, weight_dict, rank1, num_parallel, n
     for drug_test in drug_combination:
         drug_test_motrix=pd.DataFrame()
 
+        drug_list=[]
+        drug_list_nstart=[]
         for a_drug in drug_test:
             #a_drug=int(a_drug)
             temp_df1=motrix.loc[motrix["protein"]==a_drug]
@@ -78,8 +80,18 @@ def parallel_rank(all_protein, data, motrix, weight_dict, rank1, num_parallel, n
             #drug_test_motrix=drug_test_motrix.append(motrix.loc[motrix["protein"]=='5282330'])
             drug_test_motrix=drug_test_motrix.drop_duplicates(subset=['protein','drug'])
 
+            drug_list.append(a_drug)
+            drug_list_nstart.append(0)
+
         drug_test_motrix=drug_test_motrix.append(drug2drug)
 
+        dict_drug=dict(zip(drug_list,drug_list_nstart))
+        weight_dictx1={}
+        for k,v in weight_dict1.items():
+            weight_dictx1[k]=v
+
+        for k,v in dict_drug.items():
+            weight_dictx1[k]=v
 
         #pagerank计算部分
         drug_test_motrix.columns=['source','target','weight']
@@ -101,7 +113,7 @@ def parallel_rank(all_protein, data, motrix, weight_dict, rank1, num_parallel, n
         personalized_pagerank = nx.pagerank(G, alpha=0.88, personalization=weight_dict)
         #nstart_pagerank = nx.pagerank(G, alpha=0.88, nstart=weight_dict)
         weighted_pagerank = nx.pagerank(G_weighted, alpha=0.88)
-        weighted_personalized_pagerank = nx.pagerank(G_weighted, alpha=0.88, personalization=weight_dict)
+        weighted_personalized_pagerank = nx.pagerank(G_weighted, alpha=0.88, personalization=weight_dict, nstart=weight_dictx1)
 
         df_metrics = pd.DataFrame(dict(
             simple_pagerank = simple_pagerank,
