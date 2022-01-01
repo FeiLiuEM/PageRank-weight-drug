@@ -15,9 +15,11 @@ from main import parallel_analyse
 
 #motrix=xlsx2motrix.motrix_generate('./data/DATA.xlsx')
 
-motrix=pd.read_csv('./data/motrix_test.csv')
+motrix=pd.read_csv('./data/motrix_test.csv') 
 
-weight_dict={'A':1, 'B':1, 'C':1}
+weight_dict={'A':1, 'B':1, 'C':-1}
+weight_dict1={'A':1, 'B':1, 'C':1}
+
 
 #motrix.to_csv("./data/motrix.csv") 
 
@@ -50,6 +52,6 @@ simple_pagerank = nx.pagerank(G, alpha=0.85)
 personalized_pagerank = nx.pagerank(G, alpha=0.85, personalization=weight_dict)
 nstart_pagerank = nx.pagerank(G, alpha=0.85, nstart=weight_dict)
 weighted_pagerank = nx.pagerank(G_weighted, alpha=0.85)
-weighted_personalized_pagerank = nx.pagerank(G_weighted, alpha=0.85, personalization=weight_dict,max_iter=10000,tol=1e-7)
+weighted_personalized_pagerank = nx.pagerank(G_weighted, alpha=0.85, personalization=weight_dict,nstart=weight_dict1,max_iter=10000,tol=1e-7)
 
 print(weighted_personalized_pagerank)
