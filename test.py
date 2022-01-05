@@ -17,7 +17,7 @@ from main import parallel_analyse
 
 motrix=pd.read_csv('./data/motrix_test.csv') 
 
-weight_dict={'A':1, 'B':2, 'C':1}
+weight_dict={'A':2, 'B':0, 'C':0}
 weight_dict1={'A':2, 'B':1, 'C':0}
 
 
@@ -48,17 +48,17 @@ plt.show()
 #设置权重
 
 
-simple_pagerank = nx.pagerank(G, alpha=0.85)
-personalized_pagerank = nx.pagerank(G, alpha=0.85, personalization=weight_dict)
-nstart_pagerank = nx.pagerank(G, alpha=0.85, nstart=weight_dict1)
+#simple_pagerank = nx.pagerank(G, alpha=0.85)
+#personalized_pagerank = nx.pagerank(G, alpha=0.85, personalization=weight_dict)
+#nstart_pagerank = nx.pagerank(G, alpha=0.85, nstart=weight_dict1)
 weighted_pagerank = nx.pagerank(G_weighted, alpha=0.85)
 weighted_personalized_pagerank = nx.pagerank(G_weighted, alpha=0.85, personalization=weight_dict,nstart=weight_dict1,max_iter=10000,tol=1e-7)
 
 
 df_metrics = pd.DataFrame(dict(
-    simple_pagerank = simple_pagerank,
-    personalized_pagerank = personalized_pagerank,
-    nstart_pagerank = nstart_pagerank,
+    #simple_pagerank = simple_pagerank,
+    #personalized_pagerank = personalized_pagerank,
+    #nstart_pagerank = nstart_pagerank,
     weighted_pagerank = weighted_pagerank,
     weighted_personalized_pagerank = weighted_personalized_pagerank,
 ))
@@ -66,10 +66,3 @@ df_metrics.index.name='urls'
 result1=df_metrics.sort_values(by='weighted_personalized_pagerank', ascending=False) 
 
 result1
-
-list1=[]
-list2=[]
-
-for x in ['a','b']:
-    list1.append(x)
-    list2.append(0)

@@ -65,6 +65,7 @@ def parallel_rank(all_protein, data, motrix, weight_dict, weight_dict1, rank1, n
 
         drug_list=[]
         drug_list_nstart=[]
+        drug_list_nstart1=[]
         for a_drug in drug_test:
             #a_drug=int(a_drug)
             temp_df1=motrix.loc[motrix["protein"]==a_drug]
@@ -82,16 +83,26 @@ def parallel_rank(all_protein, data, motrix, weight_dict, weight_dict1, rank1, n
 
             drug_list.append(a_drug)
             drug_list_nstart.append(0)
+            drug_list_nstart1.append(1)
 
         drug_test_motrix=drug_test_motrix.append(drug2drug)
 
         dict_drug=dict(zip(drug_list,drug_list_nstart))
+        dict_drug1=dict(zip(drug_list,drug_list_nstart1))
         weight_dictx1={}
         for k,v in weight_dict1.items():
             weight_dictx1[k]=v
 
         for k,v in dict_drug.items():
             weight_dictx1[k]=v
+
+
+        weight_dictx={}
+        for k,v in weight_dict.items():
+            weight_dictx[k]=v
+        
+        for k,v in dict_drug1.items():
+            weight_dictx[k]=v
 
         #pagerank计算部分
         drug_test_motrix.columns=['source','target','weight']
@@ -113,7 +124,7 @@ def parallel_rank(all_protein, data, motrix, weight_dict, weight_dict1, rank1, n
         personalized_pagerank = nx.pagerank(G, alpha=0.88, personalization=weight_dict)
         #nstart_pagerank = nx.pagerank(G, alpha=0.88, nstart=weight_dict)
         weighted_pagerank = nx.pagerank(G_weighted, alpha=0.88)
-        weighted_personalized_pagerank = nx.pagerank(G_weighted, alpha=0.88, personalization=weight_dict, nstart=weight_dictx1)
+        weighted_personalized_pagerank = nx.pagerank(G_weighted, alpha=0.88, personalization=weight_dictx, nstart=weight_dictx1)
 
         df_metrics = pd.DataFrame(dict(
             simple_pagerank = simple_pagerank,

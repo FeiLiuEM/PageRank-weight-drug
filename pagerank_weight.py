@@ -21,7 +21,7 @@ weight_dict_1h={'cdsn':1.43, 'nr1d1':1.4181, 'chac1':1.4093}
 weight_dict_2h={'cirp':1.7468, 'armcx5':1.583, 'ccdc122':1.4073}
 weight_dict_4h={'cirp':2.2545, 'ramp3':1.8776, 'ceacam1':1.8247}
 weight_dict_8h={'cirp':2.9716, 'ramp3':2.5125, 'nqo1':2.2651}
-weight_dict_18h={'cirp':3.2746, 'ramp3':-2.5017, 'nqo1':2.9339}
+weight_dict_18h={'cirp':3.2746, 'ramp3':2.5017, 'nqo1':2.9339}
 
 weight_dict1_0_5h={'ciart':8.0218, 'chac1':9.642, 'nudt22':9.4038}
 weight_dict1_1h={'cdsn':8.167, 'nr1d1':10.6623, 'chac1':9.7105}
@@ -31,9 +31,9 @@ weight_dict1_8h={'cirp':10.2, 'ramp3':9.4661, 'nqo1':10.8736}
 weight_dict1_18h={'cirp':10.34, 'ramp3':9.4599, 'nqo1':11.2469}
 
 
-weight_dict=weight_dict_0_5h
-weight_dict1=weight_dict1_0_5h
-group='_0_5h'
+weight_dict=weight_dict_18h
+weight_dict1=weight_dict1_18h
+group='_18h'
 save_result='./result/h'+group+'.xlsx'
 open_data='./data/DATA'+group+'.xlsx'
 
@@ -74,6 +74,7 @@ all_drug_pd=pd.read_csv('./data/all_drugs.csv')
 all_drug=all_drug_pd['drugs'].values.tolist()
 all_drug_nstart=[0]*len(all_drug)
 dict_drug=dict(zip(all_drug,all_drug_nstart))
+dict_drug1=dict(zip(all_drug,[1]*len(all_drug)))
 #weight_dictx1=weight_dict1
 #weight_dictx1.update(dict_drug)
 
@@ -84,7 +85,12 @@ for k,v in weight_dict1.items():
 for k,v in dict_drug.items():
     weight_dictx1[k]=v
 
+weight_dictx={}
+for k,v in weight_dict.items():
+    weight_dictx[k]=v
 
+for k,v in dict_drug1.items():
+    weight_dictx[k]=v
 
 #pd.DataFrame(all_protein).to_csv('./data/all_protein.csv',index=False)
 #pd.DataFrame(all_drug).to_csv('./data/all_drug.csv',index=False)
@@ -118,7 +124,7 @@ simple_pagerank = nx.pagerank(G, alpha=0.85)
 personalized_pagerank = nx.pagerank(G, alpha=0.85, personalization=weight_dict)
 #nstart_pagerank = nx.pagerank(G, alpha=0.85, nstart=weight_dict)
 weighted_pagerank = nx.pagerank(G_weighted, alpha=0.85)
-weighted_personalized_pagerank = nx.pagerank(G_weighted, alpha=0.85, personalization=weight_dict,nstart=weight_dictx1,max_iter=10000,tol=1e-7)
+weighted_personalized_pagerank = nx.pagerank(G_weighted, alpha=0.85, personalization=weight_dictx,nstart=weight_dictx1,max_iter=10000,tol=1e-7)
 
 df_metrics = pd.DataFrame(dict(
     simple_pagerank = simple_pagerank,
@@ -182,6 +188,7 @@ parallel_data_3.head(20)
 parallel_data_2_1=get_translate(dict1,parallel_data_2)
 parallel_data_3_1=get_translate(dict1,parallel_data_3)
 
+'''
 #保存结果
 writer = pd.ExcelWriter(save_result)
 
@@ -195,3 +202,4 @@ data_xlsx = parallel_data_3_1
 data_xlsx.to_excel(writer, sheet_name='parallel_3',index=False)
 
 writer.save()
+'''
