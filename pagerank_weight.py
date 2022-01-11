@@ -37,7 +37,7 @@ group='_0_5h'
 save_result='./result/h'+group+'.xlsx'
 open_data='./data/DATA'+group+'.xlsx'
 
-
+#字典模块
 def get_translate(dict1,parallel_data):
 
     parallel_data1=parallel_data.sort_values(by='personalized_weight_pagerank', ascending=False)
