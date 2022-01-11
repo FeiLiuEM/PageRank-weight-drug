@@ -16,12 +16,12 @@ from main import xlsx2motrix
 from main import parallel_analyse
 
 
-weight_dict_0_5h={'ciart':1.3792, 'chac1':1.3437, 'nudt22':1.3199}
-weight_dict_1h={'cdsn':1.43, 'nr1d1':1.4181, 'chac1':1.4093}
-weight_dict_2h={'cirp':1.7468, 'armcx5':1.583, 'ccdc122':1.4073}
-weight_dict_4h={'cirp':2.2545, 'ramp3':1.8776, 'ceacam1':1.8247}
-weight_dict_8h={'cirp':2.9716, 'ramp3':2.5125, 'nqo1':2.2651}
-weight_dict_18h={'cirp':3.2746, 'ramp3':2.5017, 'nqo1':2.9339}
+weight_dict_0_5h={'ciart':0.4203, 'chac1':1.3437, 'nudt22':1.3199}
+weight_dict_1h={'cdsn':0.41153, 'nr1d1':0.41354, 'chac1':1.4093}
+weight_dict_2h={'cirp':0.36406, 'armcx5':0.38715, 'ccdc122':1.4073}
+weight_dict_4h={'cirp':0.30727, 'ramp3':0.34751, 'ceacam1':1.8247}
+weight_dict_8h={'cirp':2.9716, 'ramp3':0.28469, 'nqo1':2.2651}
+weight_dict_18h={'cirp':3.2746, 'ramp3':0.28557, 'nqo1':2.9339}
 
 weight_dict1_0_5h={'ciart':8.0218, 'chac1':9.642, 'nudt22':9.4038}
 weight_dict1_1h={'cdsn':8.167, 'nr1d1':10.6623, 'chac1':9.7105}
@@ -31,9 +31,9 @@ weight_dict1_8h={'cirp':10.2, 'ramp3':9.4661, 'nqo1':10.8736}
 weight_dict1_18h={'cirp':10.34, 'ramp3':9.4599, 'nqo1':11.2469}
 
 
-weight_dict=weight_dict_18h
-weight_dict1=weight_dict1_18h
-group='_18h'
+weight_dict=weight_dict_0_5h
+weight_dict1=weight_dict1_0_5h
+group='_0_5h'
 save_result='./result/h'+group+'.xlsx'
 open_data='./data/DATA'+group+'.xlsx'
 
@@ -188,7 +188,7 @@ parallel_data_3.head(20)
 parallel_data_2_1=get_translate(dict1,parallel_data_2)
 parallel_data_3_1=get_translate(dict1,parallel_data_3)
 
-'''
+
 #保存结果
 writer = pd.ExcelWriter(save_result)
 
@@ -202,4 +202,3 @@ data_xlsx = parallel_data_3_1
 data_xlsx.to_excel(writer, sheet_name='parallel_3',index=False)
 
 writer.save()
-'''
