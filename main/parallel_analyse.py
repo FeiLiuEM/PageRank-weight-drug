@@ -83,7 +83,7 @@ def parallel_rank(all_protein, data, motrix, weight_dict, weight_dict1, rank1, n
 
             drug_list.append(a_drug)
             drug_list_nstart.append(0)
-            drug_list_nstart1.append(1)
+            drug_list_nstart1.append(0)
 
         drug_test_motrix=drug_test_motrix.append(drug2drug)
 

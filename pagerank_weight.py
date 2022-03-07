@@ -31,9 +31,9 @@ weight_dict1_8h={'cirp':10.2, 'ramp3':9.4661, 'nqo1':10.8736}
 weight_dict1_18h={'cirp':10.34, 'ramp3':9.4599, 'nqo1':11.2469}
 
 
-weight_dict=weight_dict_0_5h
-weight_dict1=weight_dict1_0_5h
-group='_0_5h'
+weight_dict=weight_dict_18h
+weight_dict1=weight_dict1_18h
+group='_18h'
 save_result='./result/h'+group+'.xlsx'
 open_data='./data/DATA'+group+'.xlsx'
 
@@ -68,13 +68,26 @@ def get_translate(dict1,parallel_data):
 #data=pd.read_excel('./data/DATA.xlsx')
 
 all_protein, data, motrix=xlsx2motrix.motrix_generate(open_data)
+'''
+motrix['source'==446903]
 
+motrix.loc[motrix['target'] == 446903]
+
+weight_dictx1['chac1']
+
+weight_dictx[25066467]
+
+
+weight_dict[25066467]
+
+type(motrix)
+'''
 #补全nstart的药物部分字典值
 all_drug_pd=pd.read_csv('./data/all_drugs.csv')
 all_drug=all_drug_pd['drugs'].values.tolist()
 all_drug_nstart=[0]*len(all_drug)
 dict_drug=dict(zip(all_drug,all_drug_nstart))
-dict_drug1=dict(zip(all_drug,[1]*len(all_drug)))
+dict_drug1=dict(zip(all_drug,[0]*len(all_drug)))
 #weight_dictx1=weight_dict1
 #weight_dictx1.update(dict_drug)
 
@@ -202,3 +215,6 @@ data_xlsx = parallel_data_3_1
 data_xlsx.to_excel(writer, sheet_name='parallel_3',index=False)
 
 writer.save()
+
+
+
