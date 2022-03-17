@@ -1,12 +1,6 @@
 import matplotlib.pyplot as plt
 from networkx.algorithms.link_analysis.pagerank_alg import pagerank
-%matplotlib inline
-plt.rcParams.update({
-    'figure.figsize': (80, 80),
-    'axes.spines.right': False,
-    'axes.spines.left': False,
-    'axes.spines.top': False,
-    'axes.spines.bottom': False})
+
 import networkx as nx
 import pandas as pd
 import numpy as np
@@ -37,7 +31,7 @@ group='_18h'
 save_result='./result/h'+group+'.xlsx'
 open_data='./data/DATA'+group+'.xlsx'
 
-#字典模块
+#translator
 def get_translate(dict1,parallel_data):
 
     parallel_data1=parallel_data.sort_values(by='personalized_weight_pagerank', ascending=False)
@@ -68,7 +62,8 @@ def get_translate(dict1,parallel_data):
 #data=pd.read_excel('./data/DATA.xlsx')
 
 all_protein, data, motrix=xlsx2motrix.motrix_generate(open_data)
-'''
+
+'''debug
 motrix['source'==446903]
 
 motrix.loc[motrix['target'] == 446903]
@@ -82,7 +77,8 @@ weight_dict[25066467]
 
 type(motrix)
 '''
-#补全nstart的药物部分字典值
+
+#nstart values of drugs
 all_drug_pd=pd.read_csv('./data/all_drugs.csv')
 all_drug=all_drug_pd['drugs'].values.tolist()
 all_drug_nstart=[0]*len(all_drug)
@@ -120,17 +116,8 @@ G_weighted=nx.from_pandas_edgelist(df, 'source', 'target', create_using=nx.DiGra
 
 weights = [i * 5 for i in df['weight'].tolist()]
 
-'''
-#可视化部分
-pos = nx.spring_layout(G, k=0.9)
-nx.draw_networkx_edges(G, pos, edge_color='#06D6A0', arrowsize=0.5, width=weights)
-nx.draw_networkx_nodes(G, pos,node_color='#EF476F', node_size=100)
-nx.draw_networkx_labels(G, pos, font_size=4, font_weight='bold', font_color='white')
-plt.gca().margins(0.1, 0.1)
-plt.show()
-'''
 
-#设置权重
+#setting weight 
 
 
 simple_pagerank = nx.pagerank(G, alpha=0.85)
@@ -154,7 +141,7 @@ result1=df_metrics.sort_values(by='weighted_personalized_pagerank', ascending=Fa
 result1.head(20)
 
 
-#翻译模块
+#translate drug name
 f_read = open('./data/dict_file.pkl', 'rb')
 dict1 = pickle.load(f_read)
 #print(dict1)
@@ -173,27 +160,13 @@ result2=result1.sort_values(by='weighted_personalized_pagerank', ascending=False
 result2.index=drug_list
 result2.head(20)
 
-'''
-#pagerank计算结果的可视化
-node_size = [i * 4000 for i in df_metrics['weighted_personalized_pagerank'].to_list()]
-node_size
 
-
-weights = [i * 5 for i in df['weight'].tolist()]
-nx.draw_networkx_edges(G_weighted, pos, edge_color='#06D6A0', arrowsize=22, width=weights)
-nx.draw_networkx_nodes(G_weighted, pos,node_color='#EF476F', node_size=node_size)
-nx.draw_networkx_labels(G_weighted, pos, font_size=10, font_weight='bold', font_color='white')
-plt.gca().margins(0.1, 0.1)
-plt.show()
-'''
-
-
-#并行分析部分，parallel pagerank
+#parallel pagerank
 motrix.columns=['protein','drug','value']
-parallel_data_2=parallel_analyse.parallel_rank(all_protein, data, motrix,weight_dict,weight_dict1,result1,2,20)  #2代表联用药物数量，20代表前20的药物
+parallel_data_2=parallel_analyse.parallel_rank(all_protein, data, motrix,weight_dict,weight_dict1,result1,2,20)  #2 means the amounts of drugs in a combination，20 means the top20 drugs are selected
 parallel_data_2.head(20)
 
-parallel_data_3=parallel_analyse.parallel_rank(all_protein, data, motrix,weight_dict,weight_dict1,result1,3,10)  #2代表联用药物数量，20代表前20的药物
+parallel_data_3=parallel_analyse.parallel_rank(all_protein, data, motrix,weight_dict,weight_dict1,result1,3,10)  ##3 means the amounts of drugs in a combination，10 means the top10 drugs are selected
 parallel_data_3.head(20)
 #parallel_data.to_csv('result/parallel_pagerank_weight1.csv') #保存结果
 
@@ -202,7 +175,7 @@ parallel_data_2_1=get_translate(dict1,parallel_data_2)
 parallel_data_3_1=get_translate(dict1,parallel_data_3)
 
 
-#保存结果
+#save results to files
 writer = pd.ExcelWriter(save_result)
 
 data_xlsx = result2
