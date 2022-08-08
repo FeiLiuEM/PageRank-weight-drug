@@ -4,7 +4,7 @@ import itertools
 import networkx as nx
 
 
-def parallel_rank(all_protein, data, motrix, weight_dict, weight_dict1, rank1, num_parallel, num_drug):
+def parallel_rank(all_protein, data, motrix, weight_dict, rank1, num_parallel, num_drug):
 
     '''
     all_protein=pd.read_csv('../data/all_protein.csv')['0'].values.tolist()
@@ -37,7 +37,7 @@ def parallel_rank(all_protein, data, motrix, weight_dict, weight_dict1, rank1, n
 
     selected_drug1=rank_list[len(all_protein):len(all_protein)+num_drug]
 
-    #筛选每个蛋白排名靠前的药物
+    #get the top N drugs
     drug_each_protein=[]
     for key in data:
         data_protein=data.get(key)
@@ -47,7 +47,7 @@ def parallel_rank(all_protein, data, motrix, weight_dict, weight_dict1, rank1, n
 
     #len(selected_drug)
 
-    #生成药物联合治疗的排列组合
+    #generate drug combinations
     drug_combination=list(itertools.combinations(selected_drug, num_parallel))  #生成药物联合治疗的排列组合
 
     #len(drug_combination)
@@ -89,12 +89,6 @@ def parallel_rank(all_protein, data, motrix, weight_dict, weight_dict1, rank1, n
 
         dict_drug=dict(zip(drug_list,drug_list_nstart))
         dict_drug1=dict(zip(drug_list,drug_list_nstart1))
-        weight_dictx1={}
-        for k,v in weight_dict1.items():
-            weight_dictx1[k]=v
-
-        for k,v in dict_drug.items():
-            weight_dictx1[k]=v
 
 
         weight_dictx={}
@@ -104,7 +98,7 @@ def parallel_rank(all_protein, data, motrix, weight_dict, weight_dict1, rank1, n
         for k,v in dict_drug1.items():
             weight_dictx[k]=v
 
-        #pagerank计算部分
+        #pagerank
         drug_test_motrix.columns=['source','target','weight']
         
         df=pd.DataFrame()
@@ -119,12 +113,12 @@ def parallel_rank(all_protein, data, motrix, weight_dict, weight_dict1, rank1, n
         #weights = [i * 5 for i in df['weight'].tolist()]
 
 
-        #加权计算部分
+        
         simple_pagerank = nx.pagerank(G, alpha=0.88)
         personalized_pagerank = nx.pagerank(G, alpha=0.88, personalization=weight_dict)
         #nstart_pagerank = nx.pagerank(G, alpha=0.88, nstart=weight_dict)
         weighted_pagerank = nx.pagerank(G_weighted, alpha=0.88)
-        weighted_personalized_pagerank = nx.pagerank(G_weighted, alpha=0.88, personalization=weight_dictx, nstart=weight_dictx1)
+        weighted_personalized_pagerank = nx.pagerank(G_weighted, alpha=0.88, personalization=weight_dictx)
 
         df_metrics = pd.DataFrame(dict(
             simple_pagerank = simple_pagerank,
