@@ -1,0 +1,13 @@
+protein,drug,value
+Protein_1,Drug_1,10
+Protein_1,Drug_2,5
+Protein_2,Drug_1,8
+Protein_2,Drug_2,4
+Drug_1,Protein_1,5
+Drug_1,Protein_2,5
+Drug_2,Protein_1,5
+Drug_2,Protein_2,5
+Protein_1,Protein_1,10
+Protein_2,Protein_2,10
+Drug_1,Drug_1,5
+Drug_2,Drug_2,5
