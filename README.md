@@ -37,4 +37,4 @@ The data has two parts:
 
 If you use the code or data in this package, please cite:
 
-A chronotherapeutics-applicable multi-target therapeutics based on AI: the example of therapeutic hypothermia, Fei Liu et.al, Briefings in Bioinformatics, DOI:10.1093/bib/bbac365.
+Fei Liu et.al, A chronotherapeutics-applicable multi-target therapeutics based on AI: the example of therapeutic hypothermia, Briefings in Bioinformatics, DOI:10.1093/bib/bbac365.
