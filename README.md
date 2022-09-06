@@ -10,6 +10,8 @@ The whole process of this research is in `experiment.py`. It is complex and have
 
 ## Requirement
 
+python = 3.8.10
+
 NetworkX
 
 Pandas
