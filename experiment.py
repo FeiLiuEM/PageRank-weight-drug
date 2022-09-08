@@ -68,7 +68,7 @@ all_protein, data, motrix=xlsx2motrix.motrix_generate(open_data)
 
 
 
-#After docking, some drug data may be missing, and the missing data will be replenished.
+#After docking, some drug data may be missing, and the missing data will be replenished as 0.
 all_drug_pd=pd.read_csv('./data/all_drugs.csv')
 all_drug=all_drug_pd['drugs'].values.tolist()
 all_drug_nstart=[0]*len(all_drug)
