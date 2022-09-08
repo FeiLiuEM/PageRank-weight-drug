@@ -27,7 +27,7 @@ Matplotlib
 The data has two parts:
 
 1. The docking data is listed in `/data`. This means the affinity between drugs and targets.
-2. The differentiation of targets by bioinformatics analysis. It is listed in the .py file.
+2. The differentiation of targets by bioinformatics analysis. It is listed in the `.py` file.
 
 ## Protocol
 
