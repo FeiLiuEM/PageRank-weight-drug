@@ -23,7 +23,7 @@ from main import xlsx2motrix
 from main import parallel_analyse
 
 
-motrix=pd.read_csv('./data/motrix_test.csv') 
+motrix=pd.read_csv('./data/simple_example_data.csv') 
 
 weight_dict={'Protein_1':5, 'Protein_2':3, 'Drug_1':0, 'Drug_2':0}
 
