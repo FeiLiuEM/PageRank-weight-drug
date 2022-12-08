@@ -29,6 +29,17 @@ jupyter
 notebook
 ```
 
+You could install the environment by conda:
+
+`conda env create -f environment.yaml`
+
+Then it will create a conda environment `pagerank`.
+
+Or install it in other conda environment:
+
+`conda install --yes --file requirements.txt`
+
+
 ## Data structure
 
 The data has two parts:
