@@ -39,7 +39,7 @@ Or install it in other conda environment:
 
 `conda install --yes --file requirements.txt`
 
-We recommend use `jupyter notebook` with VSCode to calculate. It is very intuitive.
+We recommend use `jupyter notebook` with [VSCode](https://code.visualstudio.com/) to calculate. It is very intuitive.
 
 ## Data structure
 
@@ -54,7 +54,12 @@ The data has two parts:
 2. At different time spot, compressive rank of all drugs of the expreiment.
 3. Get rank of drug combination at different time spot of the experiment.
 
-# Citing this work
+## License
+
+The license of this research is MPL-2.0.
+
+
+## Citing this work
 
 Liu F, Jiang X, Yang J, Tao J, Zhang M. A chronotherapeutics-applicable multi-target therapeutics based on AI: Example of therapeutic hypothermia. Brief Bioinform (2022).
 
