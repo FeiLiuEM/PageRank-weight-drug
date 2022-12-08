@@ -9,7 +9,7 @@ The whole process of this research is in `experiment.py`. It is complex and have
 `simple_example.py` contains a simple example of the experiment. It contains graphes and is easy for learning.
 
 ## Requirement
-
+```
 python = 3.8.10
 
 NetworkX
@@ -18,9 +18,16 @@ Pandas
 
 NumPy
 
+SciPy
+
 OpenPyXL
 
 Matplotlib
+
+jupyter
+
+notebook
+```
 
 ## Data structure
 
