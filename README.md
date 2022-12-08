@@ -39,6 +39,7 @@ Or install it in other conda environment:
 
 `conda install --yes --file requirements.txt`
 
+We recommend use `jupyter notebook` with VSCode to calculate. It is very intuitive.
 
 ## Data structure
 
