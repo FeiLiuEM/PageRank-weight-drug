@@ -1,6 +1,6 @@
 # PageRank for multi-target drug discovery
 
-This is an application of personalization-weight-PageRank in drug development. It is designed for simplified the calculation of molecular dynamics simulations between large numbers of proteins and small molecule drug/pharmacophores based on Markov decision process (MDP). We use PageRank by python library `networkx` for multi-target drug discovery.
+This is an application of personalization-weight-PageRank in drug development. It is designed for simplified the calculation of molecular dynamics simulations between large numbers of proteins and small molecule drug/pharmacophores based on Markov decision process (MDP). We use PageRank by python library `NetworkX` for multi-target drug discovery.
 
 # How to use it
 
