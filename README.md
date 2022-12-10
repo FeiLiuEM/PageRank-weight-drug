@@ -51,8 +51,8 @@ The data has two parts:
 ## Protocol
 
 1. Get all docking ranks of target proteins.
-2. At different time spot, compressive rank of all drugs of the expreiment.
-3. Get the rank of drug combination at different time spot of the experiment.
+2. For different time group, calculate the rank of single drug respectively.
+3. For different time group, calculate the rank of drug combinations.
 
 ## License
 
